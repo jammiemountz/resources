@@ -1,0 +1,716 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="robots" content="noindex, nofollow" />
+<title>Resource Directory</title>
+<style>
+:root {
+  --bg: #f5f3ef;
+  --panel: #ffffff;
+  --border: #e3ddd2;
+  --text: #1f2937;
+  --muted: #6b7280;
+  --accent: #6b3fa0;
+  --accent-soft: #efe7f7;
+  --chip: #f0ece4;
+  --chip-active: #6b3fa0;
+  --chip-active-text: #ffffff;
+  --shadow: 0 1px 2px rgba(15,23,42,.06), 0 4px 12px rgba(15,23,42,.04);
+}
+
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; height: 100%; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.45;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+/* Header */
+header.site {
+  background: linear-gradient(135deg, #4b2a7a, #6b3fa0);
+  color: #fff;
+  padding: 18px 24px 16px;
+  box-shadow: var(--shadow);
+  flex: 0 0 auto;
+}
+header.site h1 { margin: 0 0 2px; font-size: 22px; letter-spacing: .2px; }
+header.site p  { margin: 0; opacity: .85; font-size: 13px; }
+
+/* Three-column viewport-locked layout */
+.layout {
+  flex: 1 1 auto;
+  min-height: 0;
+  display: grid;
+  grid-template-columns: 300px minmax(0, 1fr) 340px;
+  gap: 16px;
+  padding: 16px;
+  width: 100%;
+  max-width: 1600px;
+  margin: 0 auto;
+  overflow: hidden;
+}
+.layout > * { min-height: 0; height: 100%; overflow-y: auto; }
+@media (max-width: 1180px) {
+  .layout { grid-template-columns: 280px minmax(0, 1fr); }
+  aside.notes { display: none; }
+}
+@media (max-width: 760px) {
+  body { overflow: auto; }
+  .layout { grid-template-columns: 1fr; overflow: visible; height: auto; }
+  .layout > * { height: auto; overflow: visible; }
+  aside.notes { display: block; }
+}
+
+/* Filters sidebar */
+aside.filters,
+aside.notes {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 16px;
+  box-shadow: var(--shadow);
+}
+aside.filters h2 {
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: .12em;
+  color: var(--muted);
+  margin: 6px 0 8px;
+}
+.filter-block + .filter-block { margin-top: 18px; }
+.search input, select {
+  width: 100%;
+  padding: 9px 11px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: #fff;
+  font-size: 14px;
+  color: var(--text);
+}
+.search input:focus, select:focus {
+  outline: 2px solid var(--accent-soft);
+  border-color: var(--accent);
+}
+
+/* Chip-style multi-select */
+.chips { display: flex; flex-wrap: wrap; gap: 6px; }
+.chip {
+  background: var(--chip);
+  color: var(--text);
+  border: 1px solid transparent;
+  padding: 5px 10px;
+  border-radius: 999px;
+  font-size: 12px;
+  cursor: pointer;
+  user-select: none;
+  transition: background .12s, color .12s, border-color .12s;
+}
+.chip:hover { border-color: var(--accent); }
+.chip.active {
+  background: var(--chip-active);
+  color: var(--chip-active-text);
+}
+
+/* Buttons */
+.actions { display: flex; gap: 8px; margin-top: 12px; }
+button.btn {
+  flex: 1;
+  padding: 9px 12px;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background: #fff;
+  cursor: pointer;
+  font-size: 13px;
+  color: var(--text);
+}
+button.btn:hover { border-color: var(--accent); color: var(--accent); }
+button.btn.primary { background: var(--accent); color: #fff; border-color: var(--accent); }
+button.btn.primary:hover { filter: brightness(.95); color: #fff; }
+
+.build-info {
+  margin-top: 16px;
+  padding-top: 12px;
+  border-top: 1px solid var(--border);
+  color: var(--muted);
+  font-size: 11px;
+  text-align: center;
+}
+
+/* Results column */
+main.results { min-width: 0; }
+.summary {
+  display: flex; align-items: baseline; justify-content: space-between;
+  margin: 4px 4px 12px;
+  color: var(--muted); font-size: 13px;
+}
+.summary strong { color: var(--text); font-size: 15px; }
+
+.card {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 16px 18px;
+  margin-bottom: 12px;
+  box-shadow: var(--shadow);
+}
+.card h3 {
+  margin: 0 0 4px;
+  font-size: 17px;
+  display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
+}
+
+/* Card badge pills */
+.pill {
+  font-size: 11px; text-transform: uppercase; letter-spacing: .08em;
+  padding: 3px 8px; border-radius: 999px; font-weight: 600;
+}
+.pill.type   { background: var(--accent-soft); color: var(--accent); }
+.pill.pet    { background: #fef3c7; color: #92400e; }
+.pill.foster { background: #fde7d3; color: #9a3412; }
+.pill.lgbtq  { background: #ecfdf5; color: #065f46; }
+
+/* Card meta + services */
+.meta {
+  display: flex; flex-wrap: wrap; gap: 10px 18px;
+  color: var(--muted); font-size: 13px; margin: 6px 0 8px;
+}
+.meta b { color: var(--text); font-weight: 600; }
+.meta a { color: var(--accent); text-decoration: none; word-break: break-all; }
+.meta a:hover { text-decoration: underline; }
+.svc-list { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 8px; }
+.svc {
+  background: var(--chip); color: var(--text);
+  padding: 3px 8px; border-radius: 6px; font-size: 12px;
+}
+.svc.match { background: var(--accent-soft); color: var(--accent); font-weight: 600; }
+.notes {
+  margin-top: 10px; padding-top: 10px; border-top: 1px dashed var(--border);
+  color: var(--muted); font-size: 13px; font-style: italic;
+}
+.empty {
+  background: var(--panel); border: 1px dashed var(--border);
+  padding: 32px; border-radius: 12px; text-align: center; color: var(--muted);
+}
+details summary {
+  cursor: pointer; font-size: 13px; color: var(--accent);
+  margin-top: 8px; user-select: none;
+}
+details[open] summary { margin-bottom: 6px; }
+
+/* Right-hand call-notes column */
+.notes-section + .notes-section {
+  margin-top: 22px;
+  padding-top: 18px;
+  border-top: 1px solid var(--border);
+}
+.notes-section h2 {
+  margin: 0 0 4px;
+  font-size: 14px;
+  color: var(--text);
+  display: flex; align-items: center; gap: 8px;
+}
+.notes-section h2 svg { width: 16px; height: 16px; color: var(--accent); }
+.notes-section .intro { margin: 0 0 8px; font-size: 12px; color: var(--muted); }
+.notes-section .reset-row { display: flex; justify-content: flex-end; margin-top: 8px; }
+.notes-section .reset-row button {
+  font-size: 12px; padding: 5px 10px;
+  border-radius: 6px; border: 1px solid var(--border);
+  background: #fff; color: var(--muted); cursor: pointer;
+}
+.notes-section .reset-row button:hover { color: var(--accent); border-color: var(--accent); }
+
+.question-list { list-style: none; padding: 0; margin: 0; }
+.question-list li {
+  display: flex; flex-direction: column; gap: 5px;
+  padding: 10px 2px;
+  border-bottom: 1px solid var(--border);
+  font-size: 13px;
+}
+.question-list li:last-child { border-bottom: 0; }
+.question-list label { font-weight: 600; color: var(--text); line-height: 1.35; }
+.question-list input[type="text"] {
+  width: 100%;
+  padding: 7px 9px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: #fff;
+  font-size: 13px;
+  color: var(--text);
+  font-family: inherit;
+}
+.question-list input[type="text"]:focus {
+  outline: 2px solid var(--accent-soft);
+  border-color: var(--accent);
+}
+.question-list li.answered input[type="text"] {
+  border-color: var(--accent);
+  background: #fbfaff;
+}
+
+/* Optional password gate */
+body.locked > header.site,
+body.locked > .layout { display: none !important; }
+body.locked { overflow: auto; }
+#password-gate {
+  position: fixed; inset: 0;
+  background: linear-gradient(135deg, #4b2a7a, #6b3fa0);
+  display: flex; align-items: center; justify-content: center;
+  z-index: 1000;
+  padding: 24px;
+}
+#password-gate form {
+  background: var(--panel);
+  border-radius: 14px;
+  padding: 28px 32px;
+  box-shadow: 0 20px 60px rgba(15,23,42,.35);
+  width: 100%;
+  max-width: 360px;
+  text-align: center;
+}
+#password-gate h1 {
+  margin: 0 0 6px; font-size: 20px; color: var(--text);
+}
+#password-gate p {
+  margin: 0 0 18px; font-size: 13px; color: var(--muted);
+}
+#password-gate input {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  font-size: 15px;
+  margin-bottom: 10px;
+  font-family: inherit;
+}
+#password-gate input:focus {
+  outline: 2px solid var(--accent-soft);
+  border-color: var(--accent);
+}
+#password-gate button {
+  width: 100%;
+  padding: 10px 12px;
+  border-radius: 8px;
+  border: 0;
+  background: var(--accent);
+  color: #fff;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+}
+#password-gate button:hover { filter: brightness(.95); }
+#gate-error {
+  margin-top: 10px;
+  font-size: 13px;
+  color: #b91c1c;
+  min-height: 18px;
+}
+</style>
+</head>
+<body class="locked">
+
+<div id="password-gate">
+  <form id="gate-form" autocomplete="off">
+    <h1>Resource Directory</h1>
+    <p>Enter the access password to continue.</p>
+    <input id="gate-input" type="password" placeholder="Password" autocomplete="current-password" required />
+    <button type="submit">Unlock</button>
+    <div id="gate-error"></div>
+  </form>
+</div>
+<header class="site">
+  <h1>Resource Directory</h1>
+  <p>Search and filter Colorado support services by county, type, services, and more.</p>
+</header>
+
+<div class="layout">
+  <aside class="filters">
+    <div class="filter-block search">
+      <h2>Search</h2>
+      <input id="q" type="search" placeholder="Search org name, city, notes…" autocomplete="off" />
+    </div>
+
+    <div class="filter-block">
+      <h2>Type</h2>
+      <select id="type-filter">
+        <option value="">All types</option>
+        <option value="Addiction">Addiction</option>
+        <option value="Auto">Auto</option>
+        <option value="DV Shelter">DV Shelter</option>
+        <option value="Forensic Interviews">Forensic Interviews</option>
+        <option value="Human Trafficking">Human Trafficking</option>
+        <option value="ID Assistance">ID Assistance</option>
+        <option value="Language">Language</option>
+        <option value="Legal">Legal</option>
+        <option value="Medical">Medical</option>
+        <option value="Non-DV Shelter">Non-DV Shelter</option>
+        <option value="Other">Other</option>
+        <option value="Psych">Psych</option>
+        <option value="Resources">Resources</option>
+        <option value="Scholarships/Grants">Scholarships/Grants</option>
+      </select>
+    </div>
+
+    <div class="filter-block">
+      <h2>County</h2>
+      <select id="county-filter">
+        <option value="">All counties</option>
+        <option value="Adams">Adams</option>
+        <option value="Alamosa">Alamosa</option>
+        <option value="All Colorado counties">All Colorado counties</option>
+        <option value="Arapahoe">Arapahoe</option>
+        <option value="Bent">Bent</option>
+        <option value="Boulder">Boulder</option>
+        <option value="Broomfield">Broomfield</option>
+        <option value="Chaffee">Chaffee</option>
+        <option value="Clear Creek">Clear Creek</option>
+        <option value="Crowley">Crowley</option>
+        <option value="Custer">Custer</option>
+        <option value="Delta">Delta</option>
+        <option value="Denver">Denver</option>
+        <option value="Denver metro">Denver metro</option>
+        <option value="Douglas">Douglas</option>
+        <option value="Eagle">Eagle</option>
+        <option value="El Paso">El Paso</option>
+        <option value="Elbert">Elbert</option>
+        <option value="Fremont">Fremont</option>
+        <option value="Garfield">Garfield</option>
+        <option value="Gilpin">Gilpin</option>
+        <option value="Jefferson">Jefferson</option>
+        <option value="La Plata">La Plata</option>
+        <option value="Lake">Lake</option>
+        <option value="Larimer">Larimer</option>
+        <option value="Las Animas">Las Animas</option>
+        <option value="Lincoln">Lincoln</option>
+        <option value="Logan">Logan</option>
+        <option value="Mesa">Mesa</option>
+        <option value="Moffat">Moffat</option>
+        <option value="Montrose">Montrose</option>
+        <option value="Morgan">Morgan</option>
+        <option value="Nationwide">Nationwide</option>
+        <option value="Nationwide / out-of-state program">Nationwide / out-of-state program</option>
+        <option value="Otero">Otero</option>
+        <option value="Park">Park</option>
+        <option value="Phillips">Phillips</option>
+        <option value="Pitkin">Pitkin</option>
+        <option value="Pueblo">Pueblo</option>
+        <option value="Routt">Routt</option>
+        <option value="San Miguel">San Miguel</option>
+        <option value="Sedewick">Sedewick</option>
+        <option value="Summit">Summit</option>
+        <option value="Teller">Teller</option>
+        <option value="Washington">Washington</option>
+        <option value="Weld">Weld</option>
+        <option value="Yuma">Yuma</option>
+      </select>
+    </div>
+
+    <div class="filter-block">
+      <h2>Services <span id="svc-count" style="color:var(--muted); font-weight:400; text-transform:none; letter-spacing:0;"></span></h2>
+      <div class="chips" id="service-chips"></div>
+    </div>
+
+    <div class="actions">
+      <button class="btn" id="clear-btn" type="button">Clear filters</button>
+    </div>
+    <div class="build-info">From <code>resources.csv</code> · built 2026-06-09 18:56</div>
+  </aside>
+
+  <main class="results">
+    <div class="summary">
+      <div><strong id="count">0</strong> resources shown</div>
+      <div id="active-filters"></div>
+    </div>
+    <div id="results"></div>
+  </main>
+
+  <aside class="notes" aria-label="Call notes">
+    <section class="notes-section">
+      <h2>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <circle cx="12" cy="12" r="9"/>
+          <path d="M9.5 9a2.5 2.5 0 1 1 3.5 2.3c-.8.4-1 .9-1 1.7"/>
+          <path d="M12 17h.01"/>
+        </svg>
+        Caller intake
+      </h2>
+      <p class="intro">Type the caller's response next to each question.</p>
+      <ul class="question-list" id="question-list"></ul>
+      <div class="reset-row"><button type="button" data-reset="question-list">Clear responses</button></div>
+    </section>
+
+    <section class="notes-section">
+      <h2>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M3 11.5 12 4l9 7.5"/>
+          <path d="M5 10v10h14V10"/>
+          <path d="M10 20v-5h4v5"/>
+        </svg>
+        Shelter requirements
+      </h2>
+      <p class="intro">Record the caller's response to each shelter-eligibility question.</p>
+      <ul class="question-list" id="shelter-list"></ul>
+      <div class="reset-row"><button type="button" data-reset="shelter-list">Clear responses</button></div>
+    </section>
+  </aside>
+</div>
+<script>
+const DATA = [{"type": "DV Shelter", "org": "Roots of Courage (FKA Family Tree)", "counties": ["Adams", "Arapahoe", "Boulder", "Broomfield", "Denver", "Douglas", "Jefferson"], "countyDisplay": "Adams, Arapahoe, Boulder, Broomfield, Denver, Douglas, Jefferson", "services": ["Advocacy", "Basic Needs", "Case Management", "Child/Youth Services", "Counseling/Therapy", "Court Advocacy", "Crisis Hotline", "Disability Services", "Domestic Violence Services", "Education/Prevention", "Emergency Shelter", "Housing Assistance", "Human Trafficking Services", "Immigration Services", "LGBTQ+ Services", "Legal Services", "Medical/SANE", "Mental Health Crisis", "Protection Orders", "Safety Planning", "Serves Children/Youth", "Serves Families", "Serves Women", "Sexual Assault Services", "Shelter", "Spanish/Language Access", "Substance Use Treatment", "Support Groups", "Transitional Housing"], "pet": "unknown", "phone": "303-420-6752", "city": "Arvada", "shelter": "", "lgbtq": "Y", "website": "https://www.thefamilytree.org/", "websiteDisplay": "https://www.thefamilytree.org/", "notes": "Shelter and provides protective order service in Jeffco/ Low security shelter"}, {"type": "DV Shelter", "org": "Response", "counties": ["Eagle", "Garfield", "Pitkin"], "countyDisplay": "Eagle, Garfield, Pitkin", "services": ["Advocacy", "Case Management", "Counseling/Therapy", "Court Advocacy", "Crisis Hotline", "Domestic Violence Services", "Education/Prevention", "Emergency Shelter", "Housing Assistance", "Human Trafficking Services", "Legal Services", "Protection Orders", "Safety Planning", "Serves Children/Youth", "Serves Families", "Serves Men", "Serves Women", "Sexual Assault Services", "Shelter", "Spanish/Language Access", "Support Groups"], "pet": "unknown", "phone": "970-925-7233", "city": "Aspen", "shelter": "", "lgbtq": "Y", "website": "https://responsehelps.org/", "websiteDisplay": "https://responsehelps.org/", "notes": "Confidential, temporary emergency shelter"}, {"type": "DV Shelter", "org": "Three Birds Alliance (FKA Gateway )", "counties": ["Adams", "Arapahoe", "Douglas"], "countyDisplay": "Adams, Arapahoe, Douglas", "services": ["Advocacy", "Basic Needs", "Case Management", "Child/Youth Services", "Counseling/Therapy", "Court Advocacy", "Crisis Hotline", "Domestic Violence Services", "Education/Prevention", "Emergency Shelter", "Legal Services", "Pets", "Protection Orders", "Safety Planning", "Serves Children/Youth", "Serves Families", "Serves Women", "Shelter", "Spanish/Language Access", "Support Groups", "Transitional Housing"], "pet": "unknown", "phone": "303-343-1851", "city": "Aurora", "shelter": "", "lgbtq": "Y", "website": "https://threebirdsalliance.org/", "websiteDisplay": "https://threebirdsalliance.org/", "notes": "Pet-friendly shelter in Aurora/ Low security shelter"}, {"type": "DV Shelter", "org": "SPAN Safehouse Progressive Alliance for Nonviolence", "counties": ["Boulder", "Broomfield"], "countyDisplay": "Boulder, Broomfield", "services": ["Advocacy", "Basic Needs", "Case Management", "Child/Youth Services", "Counseling/Therapy", "Court Advocacy", "Crisis Hotline", "Domestic Violence Services", "Education/Prevention", "Emergency Shelter", "Financial Assistance", "Forensic Interviewing", "Housing Assistance", "Human Trafficking Services", "Immigration Services", "Legal Services", "Medical/SANE", "Mental Health Crisis", "Pet Assistance Offsite", "Pets", "Protection Orders", "Safety Planning", "Serves Children/Youth", "Serves Families", "Serves Men", "Serves Women", "Sexual Assault Services", "Shelter", "Spanish/Language Access", "Substance Use Treatment", "Support Groups", "Transitional Housing", "Transportation/Auto"], "pet": "unknown", "phone": "303-444-2424", "city": "Boulder", "shelter": "", "lgbtq": "Y", "website": "https://www.safehousealliance.org/", "websiteDisplay": "https://www.safehousealliance.org/", "notes": "Pets in humane shelter across street. Low security shelter"}, {"type": "DV Shelter", "org": "Mother's House at Haven Ridge - Family Shelter", "counties": ["Boulder"], "countyDisplay": "Boulder", "services": ["Advocacy", "Basic Needs", "Case Management", "Emergency Shelter", "Housing Assistance", "Serves Children/Youth", "Serves Families", "Serves Women", "Shelter", "Transitional Housing"], "pet": "unknown", "phone": "720-579-1637", "city": "Boulder", "shelter": "", "lgbtq": "Y", "website": "https://www.mother-house.org/lodge", "websiteDisplay": "https://www.mother-house.org/lodge", "notes": "Pregnant or new mother program/ low security shelter"}, {"type": "DV Shelter", "org": "Family Crisis Services", "counties": ["Custer", "Fremont"], "countyDisplay": "Custer, Fremont", "services": ["Advocacy", "Case Management", "Counseling/Therapy", "Court Advocacy", "Crisis Hotline", "Domestic Violence Services", "Education/Prevention", "Emergency Shelter", "Legal Services", "Protection Orders", "Safety Planning", "Serves Families", "Serves Men", "Serves Women", "Sexual Assault Services", "Shelter", "Support Groups"], "pet": "unknown", "phone": "719-275-2429", "city": "Cañon City", "shelter": "", "lgbtq": "Y", "website": "https://www.familycrisisonline.org/", "websiteDisplay": "https://www.familycrisisonline.org/", "notes": "Just resources"}, {"type": "DV Shelter", "org": "Ember Center (FKA Crisis center)", "counties": ["Arapahoe", "Douglas", "Elbert", "Lincoln"], "countyDisplay": "Arapahoe, Douglas, Elbert, Lincoln", "services": ["Advocacy", "Case Management", "Child/Youth Services", "Counseling/Therapy", "Court Advocacy", "Crisis Hotline", "Domestic Violence Services", "Education/Prevention", "Emergency Shelter", "Housing Assistance", "Legal Services", "Protection Orders", "Safety Planning", "Serves Children/Youth", "Serves Families", "Shelter", "Support Groups"], "pet": "unknown", "phone": "303-688-8484", "city": "Castle Rock", "shelter": "", "lgbtq": "Y", "website": "https://www.thecrisiscenter.org/", "websiteDisplay": "https://www.thecrisiscenter.org/", "notes": "Low security shelter"}, {"type": "DV Shelter", "org": "Tessa", "counties": ["Douglas", "El Paso", "Teller"], "countyDisplay": "Douglas, El Paso, Teller", "services": ["Advocacy", "Case Management", "Child/Youth Services", "Counseling/Therapy", "Court Advocacy", "Crisis Hotline", "Domestic Violence Services", "Education/Prevention", "Emergency Shelter", "Human Trafficking Services", "Legal Services", "Protection Orders", "Safety Planning", "Serves Children/Youth", "Serves Families", "Sexual Assault Services", "Shelter", "Spanish/Language Access", "Support Groups"], "pet": "unknown", "phone": "719-633-3819", "city": "Colorado Springs", "shelter": "", "lgbtq": "Y", "website": "https://www.tessacs.org/", "websiteDisplay": "https://www.tessacs.org/", "notes": "Low security shelter"}, {"type": "DV Shelter", "org": "Safehouse Denver", "counties": ["Denver"], "countyDisplay": "Denver", "services": ["Advocacy", "Case Management", "Counseling/Therapy", "Court Advocacy", "Crisis Hotline", "Domestic Violence Services", "Education/Prevention", "Emergency Shelter", "Housing Assistance", "Legal Services", "Protection Orders", "Safety Planning", "Shelter", "Support Groups"], "pet": "unknown", "phone": "303-318-9989", "city": "Denver", "shelter": "", "lgbtq": "Y", "website": "https://safehouse-denver.org/", "websiteDisplay": "https://safehouse-denver.org/", "notes": "Low security shelter"}, {"type": "DV Shelter", "org": "Estes Valley Crisis Advocates", "counties": ["Larimer"], "countyDisplay": "Larimer", "services": ["Advocacy", "Basic Needs", "Case Management", "Counseling/Therapy", "Court Advocacy", "Crisis Hotline", "Domestic Violence Services", "Education/Prevention", "Emergency Shelter", "Housing Assistance", "Legal Services", "Protection Orders", "Safety Planning", "Shelter", "Support Groups"], "pet": "unknown", "phone": "970-577-9781", "city": "Estes Park", "shelter": "", "lgbtq": "Y", "website": "https://www.crisisadvocates.org/", "websiteDisplay": "https://www.crisisadvocates.org/", "notes": "Low security shelter"}, {"type": "DV Shelter", "org": "Crossroads", "counties": ["Larimer"], "countyDisplay": "Larimer", "services": ["Advocacy", "Case Management", "Child/Youth Services", "Counseling/Therapy", "Court Advocacy", "Crisis Hotline", "Domestic Violence Services", "Education/Prevention", "Emergency Shelter", "Housing Assistance", "Legal Services", "Pets", "Protection Orders", "Safety Planning", "Serves Children/Youth", "Serves Families", "Shelter", "Support Groups"], "pet": "unknown", "phone": "970-482-3502", "city": "Fort Collins", "shelter": "", "lgbtq": "Y", "website": "https://crossroadssafehouse.org/", "websiteDisplay": "https://crossroadssafehouse.org/", "notes": "holds pets for 72 hours"}, {"type": "DV Shelter", "org": "ARISE (FKA Summit Advocates)", "counties": ["Summit"], "countyDisplay": "Summit", "services": ["Advocacy", "Case Management", "Counseling/Therapy", "Court Advocacy", "Crisis Hotline", "Domestic Violence Services", "Education/Prevention", "Emergency Shelter", "Housing Assistance", "Legal Services", "Pets", "Protection Orders", "Safety Planning", "Sexual Assault Services", "Shelter", "Support Groups"], "pet": "unknown", "phone": "970-485-6243", "city": "Frisco", "shelter": "", "lgbtq": "Y", "website": "http://summitadvocates.org/", "websiteDisplay": "http://summitadvocates.org/", "notes": ""}, {"type": "DV Shelter", "org": "Advocates Safehouse Project", "counties": ["Garfield"], "countyDisplay": "Garfield", "services": ["Advocacy", "Case Management", "Counseling/Therapy", "Court Advocacy", "Crisis Hotline", "Domestic Violence Services", "Education/Prevention", "Emergency Shelter", "Housing Assistance", "Legal Services", "Protection Orders", "Safety Planning", "Sexual Assault Services", "Shelter", "Support Groups"], "pet": "unknown", "phone": "970-945-4439", "city": "Glenwood Springs", "shelter": "", "lgbtq": "Y", "website": "https://www.advocatesafehouseproject.org/", "websiteDisplay": "https://www.advocatesafehouseproject.org/", "notes": ""}, {"type": "DV Shelter", "org": "Homeward Bound/Homeward Hounds", "counties": ["Mesa"], "countyDisplay": "Mesa", "services": ["Advocacy", "Basic Needs", "Case Management", "Emergency Shelter", "Housing Assistance", "Pet Assistance Offsite", "Pets", "Shelter"], "pet": "unknown", "phone": "970-256-9424", "city": "Grand Junction", "shelter": "", "lgbtq": "Y", "website": "https://homewardboundgv.org/homeward-hounds", "websiteDisplay": "https://homewardboundgv.org/homeward-hounds", "notes": "Homeless shelter that servce DV w/pets"}, {"type": "DV Shelter", "org": "Bright Future Foundation", "counties": ["Eagle"], "countyDisplay": "Eagle", "services": ["Advocacy", "Case Management", "Child/Youth Services", "Counseling/Therapy", "Court Advocacy", "Crisis Hotline", "Domestic Violence Services", "Education/Prevention", "Emergency Shelter", "Housing Assistance", "Legal Services", "Protection Orders", "Safety Planning", "Serves Children/Youth", "Serves Families", "Sexual Assault Services", "Shelter", "Support Groups"], "pet": "unknown", "phone": "970-949-7086", "city": "Avon", "shelter": "", "lgbtq": "", "website": "https://mybrightfuture.org/", "websiteDisplay": "https://mybrightfuture.org/", "notes": "Offers Transitional Housing"}, {"type": "DV Shelter", "org": "Springs Rescue Mission", "counties": ["El Paso"], "countyDisplay": "El Paso", "services": ["Basic Needs", "Case Management", "Emergency Shelter", "Healthcare/Urgent Care", "Housing Assistance", "Pets", "Shelter", "Substance Use Treatment", "Transitional Housing"], "pet": "unknown", "phone": "719-632-1822", "city": "Colorado Springs", "shelter": "", "lgbtq": "Y", "website": "https://www.springsrescuemission.org", "websiteDisplay": "https://www.springsrescuemission.org", "notes": ""}, {"type": "DV Shelter", "org": "Alternative Horizons", "counties": ["La Plata"], "countyDisplay": "La Plata", "services": ["Advocacy", "Case Management", "Counseling/Therapy", "Court Advocacy", "Crisis Hotline", "Domestic Violence Services", "Education/Prevention", "Emergency Shelter", "Housing Assistance", "Legal Services", "Protection Orders", "Safety Planning", "Sexual Assault Services", "Shelter", "Support Groups"], "pet": "unknown", "phone": "970-247-9619", "city": "Durango", "shelter": "", "lgbtq": "", "website": "https://alternativehorizons.org/", "websiteDisplay": "https://alternativehorizons.org/", "notes": ""}, {"type": "DV Shelter", "org": "Hilltop Latimer House", "counties": ["Mesa"], "countyDisplay": "Mesa", "services": ["Advocacy", "Case Management", "Child/Youth Services", "Counseling/Therapy", "Court Advocacy", "Crisis Hotline", "Domestic Violence Services", "Education/Prevention", "Emergency Shelter", "Housing Assistance", "Legal Services", "Protection Orders", "Safety Planning", "Serves Children/Youth", "Serves Families", "Sexual Assault Services", "Shelter", "Support Groups"], "pet": "unknown", "phone": "877-543-9520", "city": "Grand Junction", "shelter": "", "lgbtq": "Y", "website": "https://www.hilltoplatimerhouse.org/", "websiteDisplay": "https://www.hilltoplatimerhouse.org/", "notes": ""}, {"type": "DV Shelter", "org": "A Woman's Place", "counties": ["Weld"], "countyDisplay": "Weld", "services": ["Advocacy", "Case Management", "Child/Youth Services", "Counseling/Therapy", "Court Advocacy", "Crisis Hotline", "Domestic Violence Services", "Education/Prevention", "Emergency Shelter", "Housing Assistance", "Legal Services", "Pets", "Protection Orders", "Safety Planning", "Serves Children/Youth", "Serves Families", "Sexual Assault Services", "Shelter", "Support Groups"], "pet": "unknown", "phone": "970-356-4226", "city": "Greeley", "shelter": "", "lgbtq": "Y", "website": "https://www.awpdv.org/", "websiteDisplay": "https://www.awpdv.org/", "notes": ""}, {"type": "DV Shelter", "org": "Arkansas Valley Resource Center", "counties": ["Bent", "Crowley", "Otero"], "countyDisplay": "Bent, Crowley, Otero", "services": ["Advocacy", "Case Management", "Child/Youth Services", "Counseling/Therapy", "Court Advocacy", "Crisis Hotline", "Domestic Violence Services", "Education/Prevention", "Emergency Shelter", "Legal Services", "Pets", "Protection Orders", "Safety Planning", "Serves Children/Youth", "Serves Families", "Sexual Assault Services", "Shelter", "Support Groups"], "pet": "unknown", "phone": "719-384-7764", "city": "La Junta", "shelter": "", "lgbtq": "Y", "website": "https://arkansasvalleyresourcecenter.org/", "websiteDisplay": "https://arkansasvalleyresourcecenter.org/", "notes": "Waiting to hear back about SA & LGBTQ+ - only service animals"}, {"type": "DV Shelter", "org": "Alternatives to Violence", "counties": ["Larimer"], "countyDisplay": "Larimer", "services": ["Advocacy", "Case Management", "Counseling/Therapy", "Court Advocacy", "Crisis Hotline", "Domestic Violence Services", "Education/Prevention", "Emergency Shelter", "Housing Assistance", "Human Trafficking Services", "Legal Services", "Protection Orders", "Safety Planning", "Sexual Assault Services", "Shelter", "Support Groups"], "pet": "unknown", "phone": "970-669-5150", "city": "Loveland", "shelter": "", "lgbtq": "", "website": "https://alternativestoviolence.org/", "websiteDisplay": "https://alternativestoviolence.org/", "notes": ""}, {"type": "DV Shelter", "org": "Advocates of Lake County", "counties": ["Lake"], "countyDisplay": "Lake", "services": ["Advocacy", "Case Management", "Counseling/Therapy", "Court Advocacy", "Crisis Hotline", "Domestic Violence Services", "Education/Prevention", "Emergency Shelter", "Housing Assistance", "Legal Services", "Pets", "Protection Orders", "Safety Planning", "Sexual Assault Services", "Shelter", "Support Groups"], "pet": "unknown", "phone": "719-486-3530", "city": "Leadville", "shelter": "", "lgbtq": "Y", "website": "https://advocatesoflakecounty.org/", "websiteDisplay": "https://advocatesoflakecounty.org/", "notes": ""}, {"type": "DV Shelter", "org": "Safe Shelter of St. Vrain Valley", "counties": ["Boulder", "Weld"], "countyDisplay": "Boulder, Weld", "services": ["Advocacy", "Case Management", "Child/Youth Services", "Counseling/Therapy", "Court Advocacy", "Crisis Hotline", "Domestic Violence Services", "Education/Prevention", "Emergency Shelter", "Legal Services", "Pets", "Protection Orders", "Safety Planning", "Serves Children/Youth", "Serves Families", "Shelter", "Support Groups"], "pet": "unknown", "phone": "303-772-4422", "city": "Longmont", "shelter": "", "lgbtq": "Y", "website": "http://safeshelterofstvrain.org/", "websiteDisplay": "http://safeshelterofstvrain.org/", "notes": "Pets in room, high security shelter"}, {"type": "DV Shelter", "org": "Mariposa Center for Safety", "counties": ["Pueblo"], "countyDisplay": "Pueblo", "services": ["Advocacy", "Case Management", "Child/Youth Services", "Counseling/Therapy", "Court Advocacy", "Crisis Hotline", "Domestic Violence Services", "Education/Prevention", "Emergency Shelter", "Housing Assistance", "Legal Services", "Protection Orders", "Safety Planning", "Serves Children/Youth", "Serves Families", "Sexual Assault Services", "Shelter", "Support Groups"], "pet": "unknown", "phone": "719-542-6904", "city": "Pueblo", "shelter": "", "lgbtq": "Y", "website": "https://mariposacenterforsafety.org/", "websiteDisplay": "https://mariposacenterforsafety.org/", "notes": ""}, {"type": "DV Shelter", "org": "Advocates of Routt County", "counties": ["Routt"], "countyDisplay": "Routt", "services": ["Advocacy", "Case Management", "Counseling/Therapy", "Court Advocacy", "Crisis Hotline", "Domestic Violence Services", "Education/Prevention", "Emergency Shelter", "Housing Assistance", "Legal Services", "Protection Orders", "Safety Planning", "Sexual Assault Services", "Shelter", "Support Groups"], "pet": "unknown", "phone": "970-879-2034", "city": "Steamboat Springs", "shelter": "", "lgbtq": "Y", "website": "https://advocatesrc.org/", "websiteDisplay": "https://advocatesrc.org/", "notes": "Shelter that serves Routt County residents only"}, {"type": "DV Shelter", "org": "Help for Abused Partners", "counties": ["Logan", "Phillips", "Sedewick"], "countyDisplay": "Logan, Phillips, Sedewick", "services": ["Advocacy", "Case Management", "Counseling/Therapy", "Court Advocacy", "Crisis Hotline", "Domestic Violence Services", "Education/Prevention", "Housing Assistance", "Legal Services", "Pets", "Protection Orders", "Safety Planning", "Serves Children/Youth", "Serves Families", "Serves Men", "Serves Women", "Shelter", "Support Groups"], "pet": "unknown", "phone": "970-522-307", "city": "Sterling", "shelter": "", "lgbtq": "Y", "website": "https://helpforabusedpartners.com/", "websiteDisplay": "https://helpforabusedpartners.com/", "notes": ""}, {"type": "DV Shelter", "org": "San Miguel Resource Center", "counties": ["San Miguel"], "countyDisplay": "San Miguel", "services": ["Advocacy", "Case Management", "Child/Youth Services", "Counseling/Therapy", "Court Advocacy", "Crisis Hotline", "Domestic Violence Services", "Education/Prevention", "Emergency Shelter", "Housing Assistance", "Legal Services", "Protection Orders", "Safety Planning", "Serves Children/Youth", "Serves Families", "Sexual Assault Services", "Shelter", "Support Groups"], "pet": "unknown", "phone": "970 728-5660", "city": "Telluride", "shelter": "", "lgbtq": "Y", "website": "https://smrcco.org/our-services", "websiteDisplay": "https://smrcco.org/our-services", "notes": "Offers Counseling Services and Finanical Assistance"}, {"type": "Non-DV Shelter", "org": "The Delores Project", "counties": ["Denver"], "countyDisplay": "Denver", "services": ["Advocacy", "Basic Needs", "Case Management", "Emergency Shelter", "Housing Assistance", "Serves Men", "Serves Women", "Shelter", "Transitional Housing"], "pet": "unknown", "phone": "303-534-5411", "city": "Denver", "shelter": "", "lgbtq": "Y", "website": "https://www.thedeloresproject.org/", "websiteDisplay": "https://www.thedeloresproject.org/", "notes": "Women and trans woman"}, {"type": "Non-DV Shelter", "org": "Samaritan House Homeless Shelter", "counties": ["Denver"], "countyDisplay": "Denver", "services": ["Basic Needs", "Case Management", "Emergency Shelter", "Housing Assistance", "Shelter"], "pet": "unknown", "phone": "303-294-0241", "city": "Denver", "shelter": "", "lgbtq": "N", "website": "https://samhousedenver.org/", "websiteDisplay": "https://samhousedenver.org/", "notes": ""}, {"type": "Non-DV Shelter", "org": "Colorado Village Collaborative", "counties": ["Denver"], "countyDisplay": "Denver", "services": ["Basic Needs", "Case Management", "Emergency Shelter", "Housing Assistance", "Pets", "Shelter", "Transitional Housing"], "pet": "unknown", "phone": "720-432-8285", "city": "Denver", "shelter": "", "lgbtq": "Y", "website": "https://www.coloradovillagecollaborative.org/", "websiteDisplay": "https://www.coloradovillagecollaborative.org/", "notes": ""}, {"type": "Non-DV Shelter", "org": "Loaves & Fishes", "counties": ["Fremont"], "countyDisplay": "Fremont", "services": ["Basic Needs", "Case Management", "Emergency Shelter", "Housing Assistance"], "pet": "unknown", "phone": "719.275.0593", "city": "", "shelter": "", "lgbtq": "", "website": "https://lfministries.org/programs/housing/", "websiteDisplay": "https://lfministries.org/programs/housing/", "notes": ""}, {"type": "Non-DV Shelter", "org": "The Star Program (Denver Rescue Mission)", "counties": ["Denver"], "countyDisplay": "Denver", "services": ["Basic Needs", "Case Management", "Emergency Shelter", "Housing Assistance", "Substance Use Treatment"], "pet": "unknown", "phone": "303 504-6579, Option 2", "city": "Denver", "shelter": "", "lgbtq": "", "website": "https://denverrescuemission.org/get-help/", "websiteDisplay": "https://denverrescuemission.org/get-help/", "notes": ""}, {"type": "Non-DV Shelter", "org": "The Lodge at Haven Ridge - Navigation Shelter", "counties": ["Boulder"], "countyDisplay": "Boulder", "services": ["Basic Needs", "Case Management", "Emergency Shelter", "Housing Assistance", "Shelter"], "pet": "unknown", "phone": "720-579-1637", "city": "Boulder", "shelter": "", "lgbtq": "Y", "website": "https://havenridgeboulder.org/", "websiteDisplay": "https://havenridgeboulder.org/", "notes": ""}, {"type": "Resources", "org": "United Way", "counties": ["All Colorado counties"], "countyDisplay": "All Colorado counties", "services": ["Basic Needs", "Financial Assistance", "Healthcare/Urgent Care", "Housing Assistance", "Mental Health Crisis", "Pets", "Serves Men", "Serves Women"], "pet": "unknown", "phone": "211", "city": "All", "shelter": "", "lgbtq": "Y", "website": "https://www.211colorado.org/", "websiteDisplay": "https://www.211colorado.org/", "notes": ""}, {"type": "Resources", "org": "Colorado Crisis Services", "counties": ["All Colorado counties"], "countyDisplay": "All Colorado counties", "services": ["Counseling/Therapy", "Crisis Hotline", "Mental Health Crisis", "Serves Men", "Serves Women"], "pet": "unknown", "phone": "844-493-8255", "city": "Several", "shelter": "", "lgbtq": "Y", "website": "https://coloradocrisisservices.org/", "websiteDisplay": "https://coloradocrisisservices.org/", "notes": ""}, {"type": "Resources", "org": "Victim Connect (National Center for Victims of Crime)", "counties": ["Nationwide"], "countyDisplay": "Nationwide", "services": ["Advocacy", "Crisis Hotline", "Legal Services", "Safety Planning", "Serves Men", "Serves Women", "Victim Compensation"], "pet": "unknown", "phone": "855-484-2846", "city": "", "shelter": "", "lgbtq": "Y", "website": "https://victimconnect.org/", "websiteDisplay": "https://victimconnect.org/", "notes": "VictimConnect Resource Center provides phone, text, and chat support nationwide."}, {"type": "Resources", "org": "The Alliance (Salida, Buena Vista)", "counties": ["Chaffee"], "countyDisplay": "Chaffee", "services": ["Advocacy", "Case Management", "Counseling/Therapy", "Court Advocacy", "Crisis Hotline", "Domestic Violence Services", "Education/Prevention", "Emergency Shelter", "Housing Assistance", "Legal Services", "Protection Orders", "Safety Planning", "Serves Men", "Serves Women", "Sexual Assault Services", "Support Groups"], "pet": "unknown", "phone": "719-539-7347", "city": "Salida", "shelter": "", "lgbtq": "Y", "website": "https://alliancechaffee.org/", "websiteDisplay": "https://alliancechaffee.org/", "notes": ""}, {"type": "Resources", "org": "Atlantis Community", "counties": ["Denver"], "countyDisplay": "Denver", "services": ["Advocacy", "Basic Needs", "Disability Services", "Housing Assistance", "Serves Men", "Serves Women"], "pet": "unknown", "phone": "877-262-6525", "city": "Denver", "shelter": "", "lgbtq": "Y", "website": "https://atlantiscommunity.org/", "websiteDisplay": "https://atlantiscommunity.org/", "notes": ""}, {"type": "Resources", "org": "The Blue Bench (sexual assault)", "counties": ["Denver"], "countyDisplay": "Denver", "services": ["Advocacy", "Case Management", "Counseling/Therapy", "Crisis Hotline", "Education/Prevention", "Legal Services", "Medical/SANE", "Serves Men", "Serves Women", "Sexual Assault Services", "Support Groups"], "pet": "unknown", "phone": "303-322-7273", "city": "", "shelter": "", "lgbtq": "Y", "website": "https://thebluebench.org/", "websiteDisplay": "https://thebluebench.org/", "notes": ""}, {"type": "Resources", "org": "DOVE (Deaf)", "counties": ["All Colorado counties"], "countyDisplay": "All Colorado counties", "services": ["Advocacy", "Case Management", "Counseling/Therapy", "Court Advocacy", "Crisis Hotline", "Disability Services", "Domestic Violence Services", "Education/Prevention", "Emergency Shelter", "Interpretation/Translation", "Legal Services", "Protection Orders", "Safety Planning", "Serves Men", "Serves Women", "Sexual Assault Services", "Support Groups"], "pet": "unknown", "phone": "303-831-7874", "city": "Denver", "shelter": "", "lgbtq": "Y", "website": "https://deafdove.org/", "websiteDisplay": "https://deafdove.org/", "notes": ""}, {"type": "Resources", "org": "The Initiative - Abuse-free Culture for All", "counties": ["All Colorado counties"], "countyDisplay": "All Colorado counties", "services": ["Advocacy", "Case Management", "Counseling/Therapy", "Court Advocacy", "Crisis Hotline", "Disability Services", "Domestic Violence Services", "Education/Prevention", "Emergency Shelter", "Legal Services", "Protection Orders", "Safety Planning", "Serves Men", "Serves Women", "Sexual Assault Services", "Support Groups"], "pet": "unknown", "phone": "303-839-5510", "city": "Denver", "shelter": "", "lgbtq": "Y", "website": "https://theinitiativecolorado.org/", "websiteDisplay": "https://theinitiativecolorado.org/", "notes": ""}, {"type": "Resources", "org": "Family Promise (housing)", "counties": ["Denver"], "countyDisplay": "Denver", "services": ["Basic Needs", "Case Management", "Child/Youth Services", "Emergency Shelter", "Housing Assistance", "Serves Children/Youth", "Serves Families", "Serves Men", "Serves Women"], "pet": "unknown", "phone": "303-675-0713", "city": "Denver", "shelter": "", "lgbtq": "Y", "website": "https://www.familypromiseofgreaterdenver.org/", "websiteDisplay": "https://www.familypromiseofgreaterdenver.org/", "notes": ""}, {"type": "Resources", "org": "Family Motel", "counties": ["Denver"], "countyDisplay": "Denver", "services": ["Basic Needs", "Case Management", "Child/Youth Services", "Emergency Shelter", "Housing Assistance", "Serves Children/Youth", "Serves Families", "Serves Men", "Serves Women"], "pet": "unknown", "phone": "720-904-9821", "city": "Denver", "shelter": "", "lgbtq": "Y", "website": "https://www.voacolorado.org/familymotel", "websiteDisplay": "https://www.voacolorado.org/familymotel", "notes": ""}, {"type": "Resources", "org": "Rose Andom Center (legal)", "counties": ["Denver"], "countyDisplay": "Denver", "services": ["Advocacy", "Case Management", "Child/Youth Services", "Counseling/Therapy", "Court Advocacy", "Domestic Violence Services", "Legal Services", "Protection Orders", "Serves Children/Youth", "Serves Families", "Serves Men", "Serves Women", "Sexual Assault Services"], "pet": "unknown", "phone": "720-337-4400", "city": "Denver", "shelter": "", "lgbtq": "Y", "website": "https://roseandomcenter.org/", "websiteDisplay": "https://roseandomcenter.org/", "notes": ""}, {"type": "Resources", "org": "EChO (Evergreen Christian Outreach)", "counties": ["Jefferson"], "countyDisplay": "Jefferson", "services": ["Basic Needs", "Emergency Shelter", "Financial Assistance", "Housing Assistance", "Pets", "Serves Men", "Serves Women", "Shelter"], "pet": "unknown", "phone": "303-670-1796", "city": "Evergreen", "shelter": "", "lgbtq": "", "website": "https://evergreenchristianoutreach.org/", "websiteDisplay": "https://evergreenchristianoutreach.org/", "notes": "October through May only. overnight stays, breakfast, sack lunch togo, pet-friendly"}, {"type": "Resources", "org": "The Action Center", "counties": ["Jefferson"], "countyDisplay": "Jefferson", "services": ["Basic Needs", "Case Management", "Financial Assistance", "Housing Assistance", "Serves Men", "Serves Women"], "pet": "unknown", "phone": "303-237-7704", "city": "Lakewood", "shelter": "", "lgbtq": "Y", "website": "https://theactioncenter.org/", "websiteDisplay": "https://theactioncenter.org/", "notes": ""}, {"type": "Resources", "org": "PorchLight Family Justice Center", "counties": ["Gilpin", "Jefferson"], "countyDisplay": "Gilpin, Jefferson", "services": ["Advocacy", "Case Management", "Child/Youth Services", "Counseling/Therapy", "Court Advocacy", "Domestic Violence Services", "Legal Services", "Protection Orders", "Serves Children/Youth", "Serves Families", "Serves Men", "Serves Women", "Sexual Assault Services"], "pet": "unknown", "phone": "303-271-6100", "city": "", "shelter": "", "lgbtq": "Y", "website": "https://www.porchlightfjc.org/", "websiteDisplay": "https://www.porchlightfjc.org/", "notes": ""}, {"type": "Resources", "org": "Shiloh House (youth 5-18)", "counties": ["Adams", "Arapahoe", "Denver", "Douglas", "El Paso", "Jefferson", "Larimer", "Mesa", "Pueblo", "Weld"], "countyDisplay": "Adams, Arapahoe, Denver, Douglas, El Paso, Jefferson, Larimer, Mesa, Pueblo, Weld", "services": ["Case Management", "Child/Youth Services", "Counseling/Therapy", "Education/Prevention", "Emergency Shelter", "Housing Assistance", "Serves Children/Youth", "Serves Families", "Serves Men", "Serves Women", "Shelter"], "pet": "unknown", "phone": "303-933-1393", "city": "Several", "shelter": "", "lgbtq": "Y", "website": "https://shilohhouse.org/facilities/", "websiteDisplay": "https://shilohhouse.org/facilities/", "notes": ""}, {"type": "Resources", "org": "Colorado Immigration Coalition", "counties": ["All Colorado counties"], "countyDisplay": "All Colorado counties", "services": ["Advocacy", "Education/Prevention", "Immigration Services", "Legal Services", "Serves Men", "Serves Women", "Spanish/Language Access"], "pet": "unknown", "phone": "303-922-3344", "city": "", "shelter": "", "lgbtq": "", "website": "https://coloradoimmigrant.org/", "websiteDisplay": "https://coloradoimmigrant.org/", "notes": ""}, {"type": "Resources", "org": "Peace Love Paws (low cost vet care)", "counties": ["All Colorado counties"], "countyDisplay": "All Colorado counties", "services": ["Financial Assistance", "Pet Assistance Offsite", "Pets", "Serves Men", "Serves Women"], "pet": "unknown", "phone": "303-990-1893", "city": "Statewide", "shelter": "", "lgbtq": "N", "website": "https://www.peacelovepaws.org/resources", "websiteDisplay": "https://www.peacelovepaws.org/resources", "notes": ""}, {"type": "Resources", "org": "Red Rover (Boarding assistance)", "counties": ["Nationwide"], "countyDisplay": "Nationwide", "services": ["Emergency Shelter", "Financial Assistance", "Pet Assistance Offsite", "Pets", "Serves Men", "Serves Women"], "pet": "unknown", "phone": "916-429-2457", "city": "All", "shelter": "", "lgbtq": "N", "website": "https://redrover.org", "websiteDisplay": "https://redrover.org", "notes": ""}, {"type": "Other", "org": "SafT Program (DV Pet Shelter)", "counties": ["Nationwide"], "countyDisplay": "Nationwide", "services": [], "pet": "unknown", "phone": "", "city": "All", "shelter": "", "lgbtq": "", "website": "https://saftprogram.org/pet-friendly-domestic-violence-shelters/", "websiteDisplay": "https://saftprogram.org/pet-friendly-domestic-violence-shelters/", "notes": "Resource for shelters who want to be pet-friendly. Is NOT client-facing."}, {"type": "Resources", "org": "Jewish Family Services", "counties": ["Denver metro"], "countyDisplay": "Denver metro", "services": ["Basic Needs", "Case Management", "Counseling/Therapy", "Financial Assistance", "Housing Assistance", "Mental Health Crisis", "Serves Families", "Serves Men", "Serves Women"], "pet": "unknown", "phone": "303-597-5000", "city": "All", "shelter": "", "lgbtq": "", "website": "https://www.jewishfamilyservice.org/", "websiteDisplay": "https://www.jewishfamilyservice.org/", "notes": "Financial aid, homeless and food scarcity"}, {"type": "Resources", "org": "Bundle of Joy", "counties": ["Jefferson"], "countyDisplay": "Jefferson", "services": ["Basic Needs", "Child/Youth Services", "Financial Assistance", "Serves Children/Youth", "Serves Families", "Serves Men", "Serves Women"], "pet": "unknown", "phone": "303-900-8268", "city": "Littleton", "shelter": "", "lgbtq": "N", "website": "https://passionatelifechurch.com/bundleofjoy/", "websiteDisplay": "https://passionatelifechurch.com/bundleofjoy/", "notes": "Pro-life support for those in need"}, {"type": "Resources", "org": "Safe Havens", "counties": ["Nationwide"], "countyDisplay": "Nationwide", "services": ["Domestic Violence Services", "Emergency Shelter", "Pet Assistance Offsite", "Serves Men", "Serves Women"], "pet": "unknown", "phone": "", "city": "", "shelter": "", "lgbtq": "", "website": "https://safehavensforpets.org/#all-safehavens", "websiteDisplay": "https://safehavensforpets.org/#all-safehavens", "notes": ""}, {"type": "Resources", "org": "The Matthew House", "counties": ["Larimer"], "countyDisplay": "Larimer", "services": ["Basic Needs", "Case Management", "Child/Youth Services", "Education/Prevention", "Housing Assistance", "Serves Children/Youth", "Serves Families", "Serves Men", "Serves Women"], "pet": "unknown", "phone": "970-472-4293", "city": "Fort Collins", "shelter": "", "lgbtq": "", "website": "https://www.thematthewshouse.org/", "websiteDisplay": "https://www.thematthewshouse.org/", "notes": ""}, {"type": "Resources", "org": "Partners in Housing", "counties": ["El Paso"], "countyDisplay": "El Paso", "services": ["Basic Needs", "Case Management", "Housing Assistance", "Serves Men", "Serves Women", "Transitional Housing"], "pet": "unknown", "phone": "719-473-8890", "city": "CO Springs", "shelter": "", "lgbtq": "", "website": "https://partnersinhousing.org/", "websiteDisplay": "https://partnersinhousing.org/", "notes": ""}, {"type": "Resources", "org": "Metro West Housing", "counties": ["Jefferson"], "countyDisplay": "Jefferson", "services": ["Case Management", "Housing Assistance", "Serves Men", "Serves Women"], "pet": "unknown", "phone": "303-987-7580", "city": "Lakewood", "shelter": "", "lgbtq": "", "website": "https://www.mwhs.org/", "websiteDisplay": "https://www.mwhs.org/", "notes": ""}, {"type": "Resources", "org": "Joshua Station", "counties": ["Denver"], "countyDisplay": "Denver", "services": ["Basic Needs", "Case Management", "Housing Assistance", "Serves Men", "Serves Women", "Transitional Housing"], "pet": "unknown", "phone": "720-377-1103", "city": "Denver", "shelter": "", "lgbtq": "", "website": "https://milehighmin.org/", "websiteDisplay": "https://milehighmin.org/", "notes": ""}, {"type": "Resources", "org": "Humane Colorado (formerly DDFL) 30-day foster", "counties": ["Denver metro"], "countyDisplay": "Denver metro", "services": ["Emergency Shelter", "Pet Assistance Offsite", "Serves Men", "Serves Women"], "pet": "unknown", "phone": "(303) 751-5772", "city": "Denver", "shelter": "", "lgbtq": "", "website": "https://humanecolorado.org/", "websiteDisplay": "https://humanecolorado.org/", "notes": ""}, {"type": "Resources", "org": "Foothills Animal Shelter Foster Program", "counties": ["Jefferson"], "countyDisplay": "Jefferson", "services": ["Emergency Shelter", "Pet Assistance Offsite", "Serves Men", "Serves Women"], "pet": "unknown", "phone": "303-278-7575", "city": "", "shelter": "", "lgbtq": "", "website": "https://foothillsanimalshelter.org/fostering-happiness-and-health-a-look-inside-the-foothills-foster-program/", "websiteDisplay": "https://foothillsanimalshelter.org/fostering-happiness-and-health-a-look-inside-the-foothills-foster-program/", "notes": ""}, {"type": "Resources", "org": "Pralines Backyard Foundation", "counties": ["Nationwide"], "countyDisplay": "Nationwide", "services": ["Emergency Shelter", "Pet Assistance Offsite", "Serves Men", "Serves Women"], "pet": "unknown", "phone": "404-594-1146", "city": "", "shelter": "", "lgbtq": "", "website": "https://pralinesbackyardfoundation.org/", "websiteDisplay": "https://pralinesbackyardfoundation.org/", "notes": ""}, {"type": "Resources", "org": "Modest Needs (emergency financial assistance)", "counties": ["Nationwide"], "countyDisplay": "Nationwide", "services": ["Basic Needs", "Financial Assistance", "Healthcare/Urgent Care", "Housing Assistance", "Serves Men", "Serves Women"], "pet": "unknown", "phone": "(844) 667-3776", "city": "All", "shelter": "", "lgbtq": "", "website": "https://www.modestneeds.org/", "websiteDisplay": "https://www.modestneeds.org/", "notes": ""}, {"type": "Resources", "org": "Colorado Child Abuse and Neglect Hotline", "counties": ["All Colorado counties"], "countyDisplay": "All Colorado counties", "services": ["Advocacy", "Child/Youth Services", "Crisis Hotline", "Serves Children/Youth", "Serves Families", "Serves Men", "Serves Women"], "pet": "unknown", "phone": "844-264-5437", "city": "All", "shelter": "", "lgbtq": "", "website": "https://co4kids.org/", "websiteDisplay": "https://co4kids.org/", "notes": ""}, {"type": "Resources", "org": "Developmental Disability Resource Center", "counties": ["Gilpin", "Jefferson", "Clear Creek", "Summit"], "countyDisplay": "Gilpin, Jefferson, Clear Creek, Summit", "services": ["Advocacy", "Case Management", "Disability Services", "Serves Men", "Serves Women"], "pet": "unknown", "phone": "303-233-3363", "city": "Lakewood", "shelter": "", "lgbtq": "", "website": "https://www.ddrcco.com", "websiteDisplay": "https://www.ddrcco.com", "notes": ""}, {"type": "Resources", "org": "Tree Top Advocacy Center (children)", "counties": ["Summit"], "countyDisplay": "Summit", "services": ["Advocacy", "Case Management", "Child/Youth Services", "Counseling/Therapy", "Forensic Interviewing", "Medical/SANE", "Serves Children/Youth", "Serves Families", "Serves Men", "Serves Women"], "pet": "unknown", "phone": "970-409-2111", "city": "Breckenridge", "shelter": "", "lgbtq": "", "website": "https://www.treetopcenter.org/", "websiteDisplay": "https://www.treetopcenter.org/", "notes": ""}, {"type": "Resources", "org": "Juniper Southern Colorado", "counties": ["Pueblo"], "countyDisplay": "Pueblo", "services": ["Advocacy", "Case Management", "Court Advocacy", "Serves Men", "Serves Women", "Victim Compensation"], "pet": "unknown", "phone": "719-549-0549", "city": "Pueblo", "shelter": "", "lgbtq": "", "website": "Victims Compensation, Court Accompaniment, Case management", "websiteDisplay": "Victims Compensation, Court Accompaniment, Case management", "notes": ""}, {"type": "Resources", "org": "Pets of the Homeless", "counties": ["Nationwide"], "countyDisplay": "Nationwide", "services": ["Basic Needs", "Healthcare/Urgent Care", "Pet Assistance Offsite", "Pets", "Serves Men", "Serves Women"], "pet": "unknown", "phone": "775-841-7463", "city": "", "shelter": "", "lgbtq": "", "website": "https://PetsoftheHomeless.org", "websiteDisplay": "https://PetsoftheHomeless.org", "notes": "https://petsofthehomeless.org/emergency-veterinary-"}, {"type": "Human Trafficking", "org": "Refuge for Women, Inc.", "counties": ["Nationwide / out-of-state program"], "countyDisplay": "Nationwide / out-of-state program", "services": ["Advocacy", "Case Management", "Counseling/Therapy", "Emergency Shelter", "Human Trafficking Services", "Serves Women", "Shelter", "Transitional Housing"], "pet": "unknown", "phone": "940-331-0042", "city": "several locations out of state", "shelter": "", "lgbtq": "", "website": "https://www.refugeforwomen.org", "websiteDisplay": "https://www.refugeforwomen.org", "notes": "Liana Cortez, Case Manager liana.cortez@refugeforwomen.org - email application to her to expedite process https://docs.google.com/forms/d/e/1FAIpQLScwnqzdZMIOugmTmODc10Sn1MaBUdcYIndsnnb5JI1lehdlcQ/viewform"}, {"type": "Human Trafficking", "org": "Safe Places for Women", "counties": ["Arapahoe", "Denver", "Douglas", "Jefferson"], "countyDisplay": "Arapahoe, Denver, Douglas, Jefferson", "services": ["Advocacy", "Case Management", "Emergency Shelter", "Housing Assistance", "Human Trafficking Services", "Serves Women", "Shelter"], "pet": "unknown", "phone": "859-803-7199", "city": "Littleton", "shelter": "", "lgbtq": "", "website": "https://safeplacesforwomen.org", "websiteDisplay": "https://safeplacesforwomen.org", "notes": "https://coveredcolorado.org/"}, {"type": "Human Trafficking", "org": "Covered Colorado", "counties": ["Arapahoe"], "countyDisplay": "Arapahoe", "services": ["Advocacy", "Case Management", "Counseling/Therapy", "Human Trafficking Services", "Serves Women", "Shelter"], "pet": "unknown", "phone": "866-455-5075", "city": "Aurora", "shelter": "", "lgbtq": "", "website": "https://coveredcolorado.org/", "websiteDisplay": "https://coveredcolorado.org/", "notes": "6-8 month residential program- adults and women only"}, {"type": "Human Trafficking", "org": "Her Campaign Program", "counties": ["Denver"], "countyDisplay": "Denver", "services": ["Advocacy", "Case Management", "Counseling/Therapy", "Emergency Shelter", "Human Trafficking Services", "Shelter", "Transitional Housing"], "pet": "unknown", "phone": "720-665-2637", "city": "Denver", "shelter": "", "lgbtq": "", "website": "https://hercampaign.org/", "websiteDisplay": "https://hercampaign.org/", "notes": "8 Week Program"}, {"type": "Auto", "org": "Cars Helping Charities", "counties": ["All Colorado counties"], "countyDisplay": "All Colorado counties", "services": ["Financial Assistance", "Serves Men", "Serves Women", "Transportation/Auto"], "pet": "unknown", "phone": "866-701-2277", "city": "All", "shelter": "", "lgbtq": "", "website": "https://carshelpingcharities.org/", "websiteDisplay": "https://carshelpingcharities.org/", "notes": ""}, {"type": "Auto", "org": "Adams & Sons (Cars/Vehicles)", "counties": ["El Paso"], "countyDisplay": "El Paso", "services": ["Financial Assistance", "Pets", "Serves Men", "Serves Women", "Transportation/Auto"], "pet": "unknown", "phone": "833-647-1321", "city": "Colorado Springs", "shelter": "", "lgbtq": "Y", "website": "https://adamautorepair.com/", "websiteDisplay": "https://adamautorepair.com/", "notes": ""}, {"type": "Auto", "org": "Spark Hope Auto (FKA-Hands of the Carpenter)", "counties": ["Adams", "Arapahoe", "Boulder", "Broomfield", "Denver", "Douglas", "Jefferson"], "countyDisplay": "Adams, Arapahoe, Boulder, Broomfield, Denver, Douglas, Jefferson", "services": ["Financial Assistance", "Serves Men", "Serves Women", "Transportation/Auto"], "pet": "unknown", "phone": "303-526-4488", "city": "Golden", "shelter": "", "lgbtq": "", "website": "https://sparkhopeautomotive.org/apply-for-automotive-services/", "websiteDisplay": "https://sparkhopeautomotive.org/apply-for-automotive-services/", "notes": ""}, {"type": "Auto", "org": "Salvation Army Conifer", "counties": ["Jefferson"], "countyDisplay": "Jefferson", "services": ["Basic Needs", "Financial Assistance", "Serves Men", "Serves Women", "Transportation/Auto"], "pet": "unknown", "phone": "720-295-5337", "city": "Conifer", "shelter": "", "lgbtq": "", "website": "https://westernusa.salvationarmy.org/intermountain_us_west/", "websiteDisplay": "https://westernusa.salvationarmy.org/intermountain_us_west/", "notes": "Donna     Conifertsarequests@gmail.com - written repair estimates submitted along with copy of client's driver's license for financial aid consideration."}, {"type": "Auto", "org": "Stranded Motorist Funds", "counties": ["All Colorado counties"], "countyDisplay": "All Colorado counties", "services": ["Financial Assistance", "Serves Men", "Serves Women", "Transportation/Auto"], "pet": "unknown", "phone": "", "city": "", "shelter": "", "lgbtq": "", "website": "https://strandedmotoristfund.org/", "websiteDisplay": "https://strandedmotoristfund.org/", "notes": "Teller and El Paso Counties"}, {"type": "ID Assistance", "org": "Colorado ID Project", "counties": ["All Colorado counties"], "countyDisplay": "All Colorado counties", "services": ["ID Assistance", "Legal Services", "Serves Men", "Serves Women"], "pet": "unknown", "phone": "303-837-1313 x 444", "city": "All", "shelter": "", "lgbtq": "", "website": "https://coloradoidproject.wordpress.com/", "websiteDisplay": "https://coloradoidproject.wordpress.com/", "notes": ""}, {"type": "Legal", "org": "Rocky Mountain Victim Law Center", "counties": [], "countyDisplay": "", "services": ["Legal Services"], "pet": "unknown", "phone": "970-925-7233", "city": "", "shelter": "", "lgbtq": "", "website": "https://www.rmvictimlaw.org", "websiteDisplay": "www.rmvictimlaw.org", "notes": "Hotline: 970-925-7233 Main Phone Number: 970.920.5357"}, {"type": "Legal", "org": "National Crime Bar Association (Civil Lawyer List)", "counties": ["Nationwide"], "countyDisplay": "Nationwide", "services": ["Advocacy", "Civil Attorney Referral", "Legal Services", "Serves Men", "Serves Women"], "pet": "unknown", "phone": "", "city": "", "shelter": "", "lgbtq": "", "website": "https://victimbar.org/attorney-referral-request-form/", "websiteDisplay": "https://victimbar.org/attorney-referral-request-form/", "notes": ""}, {"type": "Legal", "org": "Project Safeguard", "counties": ["Adams", "Arapahoe", "Denver"], "countyDisplay": "Adams, Arapahoe, Denver", "services": ["Advocacy", "Court Advocacy", "Domestic Violence Services", "Legal Services", "Protection Orders", "Serves Men", "Serves Women"], "pet": "unknown", "phone": "720-618-3482", "city": "Denver", "shelter": "", "lgbtq": "", "website": "https://psghelps.org/", "websiteDisplay": "https://psghelps.org/", "notes": ""}, {"type": "Scholarships/Grants", "org": "Philanthropic Educational Organization (PEO)", "counties": ["Nationwide"], "countyDisplay": "Nationwide", "services": ["Education/Prevention", "Financial Assistance", "Scholarship/Grant", "Serves Women"], "pet": "unknown", "phone": "", "city": "", "shelter": "", "lgbtq": "", "website": "https://www.peointernational.org/peo-projects-and-philanthropies", "websiteDisplay": "https://www.peointernational.org/peo-projects-and-philanthropies", "notes": "Women’s educational financial support"}, {"type": "Scholarships/Grants", "org": "Daughters of American Revolution (DAR)", "counties": ["All Colorado counties"], "countyDisplay": "All Colorado counties", "services": ["Education/Prevention", "Financial Assistance", "Scholarship/Grant", "Serves Men", "Serves Women"], "pet": "unknown", "phone": "", "city": "", "shelter": "", "lgbtq": "", "website": "https://coloradodar.org/scholarships-2/", "websiteDisplay": "https://coloradodar.org/scholarships-2/", "notes": ""}, {"type": "Language", "org": "Voiance", "counties": ["Nationwide"], "countyDisplay": "Nationwide", "services": ["Interpretation/Translation", "Serves Men", "Serves Women", "Spanish/Language Access"], "pet": "unknown", "phone": "866-998-0338", "city": "PIN 0982", "shelter": "", "lgbtq": "", "website": "https://www.voiance.com/", "websiteDisplay": "https://www.voiance.com/", "notes": ""}, {"type": "Language", "org": "Language Line", "counties": ["Nationwide"], "countyDisplay": "Nationwide", "services": ["Interpretation/Translation", "Serves Men", "Serves Women", "Spanish/Language Access"], "pet": "unknown", "phone": "800-752-6096", "city": "", "shelter": "", "lgbtq": "", "website": "https://www.languageline.com/", "websiteDisplay": "https://www.languageline.com/", "notes": ""}, {"type": "Addiction", "org": "Sobriety House, Inc. (Medicaid Accepted)", "counties": ["Denver"], "countyDisplay": "Denver", "services": ["Case Management", "Counseling/Therapy", "Emergency Shelter", "Housing Assistance", "Serves Men", "Serves Women", "Substance Use Treatment"], "pet": "unknown", "phone": "720-381-4337", "city": "", "shelter": "", "lgbtq": "", "website": "https://www.sobrietyhouse.org/", "websiteDisplay": "https://www.sobrietyhouse.org/", "notes": ""}, {"type": "Other", "org": "Replevin", "counties": ["All Colorado counties"], "countyDisplay": "All Colorado counties", "services": ["Legal Services", "Replevin/Property Recovery", "Serves Men", "Serves Women"], "pet": "unknown", "phone": "", "city": "", "shelter": "", "lgbtq": "", "website": "https://www.courts.state.co.us/Self_Help/recoverpersonalproperty/", "websiteDisplay": "https://www.courts.state.co.us/Self_Help/recoverpersonalproperty/", "notes": "Court assistane in recovering personal property <$25,000"}, {"type": "Psych", "org": "Diversus Bailey", "counties": ["Park"], "countyDisplay": "Park", "services": ["Case Management", "Counseling/Therapy", "Mental Health Crisis", "Serves Men", "Serves Women"], "pet": "unknown", "phone": "303-838-5013", "city": "", "shelter": "", "lgbtq": "", "website": "https://diversushealth.org/", "websiteDisplay": "https://diversushealth.org/", "notes": ""}, {"type": "Psych", "org": "Jefferson Center for Mental Health", "counties": ["Clear Creek", "Gilpin", "Jefferson"], "countyDisplay": "Clear Creek, Gilpin, Jefferson", "services": ["Case Management", "Counseling/Therapy", "Mental Health Crisis", "Serves Men", "Serves Women", "Substance Use Treatment"], "pet": "unknown", "phone": "303-425-0300", "city": "", "shelter": "", "lgbtq": "", "website": "https://www.jcmh.org/", "websiteDisplay": "https://www.jcmh.org/", "notes": ""}, {"type": "Psych", "org": "MileHi Psychiatry", "counties": ["Denver metro"], "countyDisplay": "Denver metro", "services": ["Counseling/Therapy", "Mental Health Crisis", "Serves Men", "Serves Women"], "pet": "unknown", "phone": "855-925-3997", "city": "", "shelter": "", "lgbtq": "", "website": "https://milehighpsychiatry.com/", "websiteDisplay": "https://milehighpsychiatry.com/", "notes": ""}, {"type": "Psych", "org": "Psychology Today - Therapist Finder", "counties": ["Nationwide"], "countyDisplay": "Nationwide", "services": ["Counseling/Therapy", "Serves Men", "Serves Women"], "pet": "unknown", "phone": "", "city": "", "shelter": "", "lgbtq": "", "website": "https://www.psychologytoday.com", "websiteDisplay": "https://www.psychologytoday.com", "notes": ""}, {"type": "Psych", "org": "El Consultorio PLLC (Spanish counseling)", "counties": ["Denver metro"], "countyDisplay": "Denver metro", "services": ["Counseling/Therapy", "Serves Men", "Serves Women", "Spanish/Language Access"], "pet": "unknown", "phone": "720-260-4115", "city": "", "shelter": "", "lgbtq": "", "website": "https://el-consultorio.com", "websiteDisplay": "https://el-consultorio.com", "notes": ""}, {"type": "Psych", "org": "Park County Counseling (Conifer Counseling)", "counties": ["Jefferson", "Park"], "countyDisplay": "Jefferson, Park", "services": ["Counseling/Therapy", "Serves Men", "Serves Women"], "pet": "unknown", "phone": "(719) 728-2733", "city": "", "shelter": "", "lgbtq": "", "website": "https://parkcountycounseling.org/", "websiteDisplay": "https://parkcountycounseling.org/", "notes": "Email to: intake@parkcountycounseling.org"}, {"type": "Psych", "org": "Children's Trauma Center (Mental Health 3-19)", "counties": ["Jefferson"], "countyDisplay": "Jefferson", "services": ["Child/Youth Services", "Counseling/Therapy", "Serves Children/Youth", "Serves Families", "Serves Men", "Serves Women"], "pet": "unknown", "phone": "720-262-1279", "city": "Conifer", "shelter": "", "lgbtq": "N", "website": "https://www.childrenstraumacenter.com/index.html", "websiteDisplay": "https://www.childrenstraumacenter.com/index.html", "notes": ""}, {"type": "Psych", "org": "Conifer Play Therapy", "counties": ["Jefferson"], "countyDisplay": "Jefferson", "services": ["Child/Youth Services", "Counseling/Therapy", "Serves Children/Youth", "Serves Families", "Serves Men", "Serves Women"], "pet": "unknown", "phone": "303-838-2179", "city": "Conifer", "shelter": "", "lgbtq": "", "website": "https://www.coniferplaytherapy.com/", "websiteDisplay": "https://www.coniferplaytherapy.com/", "notes": ""}, {"type": "Psych", "org": "Resilience 1220", "counties": ["Clear Creek", "Gilpin", "Jefferson", "Park"], "countyDisplay": "Clear Creek, Gilpin, Jefferson, Park", "services": ["Child/Youth Services", "Counseling/Therapy", "Mental Health Crisis", "Serves Children/Youth", "Serves Families", "Serves Men", "Serves Women"], "pet": "unknown", "phone": "720-282-1164", "city": "Mountain Communities", "shelter": "", "lgbtq": "", "website": "https://www.resilience1220.org/", "websiteDisplay": "https://www.resilience1220.org/", "notes": "Mental health support for teens 12-20"}, {"type": "Psych", "org": "988 Colorado Mental Health Line", "counties": ["All Colorado counties"], "countyDisplay": "All Colorado counties", "services": ["Crisis Hotline", "Mental Health Crisis", "Serves Men", "Serves Women"], "pet": "unknown", "phone": "988", "city": "", "shelter": "", "lgbtq": "", "website": "https://988colorado.com/", "websiteDisplay": "https://988colorado.com/", "notes": "Call or text for immediate 24/7 mental health support"}, {"type": "Psych", "org": "Paragon", "counties": ["Adams", "Arapahoe", "Boulder", "Broomfield", "Denver", "Douglas", "Jefferson"], "countyDisplay": "Adams, Arapahoe, Boulder, Broomfield, Denver, Douglas, Jefferson", "services": ["Case Management", "Counseling/Therapy", "Mental Health Crisis", "Serves Men", "Serves Women"], "pet": "unknown", "phone": "(303) 691-6095", "city": "", "shelter": "", "lgbtq": "", "website": "https://www.paragonbhc.org/", "websiteDisplay": "https://www.paragonbhc.org/", "notes": ""}, {"type": "Other", "org": "Judical District/Jefferson County", "counties": ["Clear Creek", "Gilpin", "Jefferson"], "countyDisplay": "Clear Creek, Gilpin, Jefferson", "services": ["Court Advocacy", "Legal Services", "Serves Men", "Serves Women", "Victim Compensation"], "pet": "unknown", "phone": "303-271-6800", "city": "Gilpin 1st St, Clear Creek", "shelter": "", "lgbtq": "", "website": "https://firstda.co/victim-witness/", "websiteDisplay": "https://firstda.co/victim-witness/", "notes": ""}, {"type": "Other", "org": "Love INC (religious coaltion of churches)", "counties": ["Arapahoe", "Douglas", "Jefferson"], "countyDisplay": "Arapahoe, Douglas, Jefferson", "services": ["Basic Needs", "Financial Assistance", "Housing Assistance", "Serves Men", "Serves Women", "Transportation/Auto"], "pet": "unknown", "phone": "303-794-5683", "city": "Littleton", "shelter": "", "lgbtq": "", "website": "https://loveinclittleton.org", "websiteDisplay": "https://loveinclittleton.org", "notes": ""}, {"type": "Medical", "org": "Denver Health (SAFE/SANE) 24/7", "counties": ["Denver"], "countyDisplay": "Denver", "services": ["Advocacy", "Healthcare/Urgent Care", "Medical/SANE", "Serves Men", "Serves Women", "Sexual Assault Services"], "pet": "unknown", "phone": "303 602 3007", "city": "777 Bannock St, Denver", "shelter": "", "lgbtq": "", "website": "https://www.denverhealth.org/services/emergency-medicine/sexual-assault-nurse-examiners", "websiteDisplay": "https://www.denverhealth.org/services/emergency-medicine/sexual-assault-nurse-examiners", "notes": ""}, {"type": "Medical", "org": "The Kempe Center (SAFE/SANE) pediatric only 24/7", "counties": ["Adams", "Arapahoe", "Denver"], "countyDisplay": "Adams, Arapahoe, Denver", "services": ["Child/Youth Services", "Forensic Interviewing", "Healthcare/Urgent Care", "Medical/SANE", "Serves Children/Youth", "Serves Families", "Serves Men", "Serves Women", "Sexual Assault Services"], "pet": "unknown", "phone": "303 864 5300", "city": "13123 16th Ave. Aurora 80045", "shelter": "", "lgbtq": "", "website": "https://kempecenter.org/impact-areas/clinical-services/sane-program/", "websiteDisplay": "https://kempecenter.org/impact-areas/clinical-services/sane-program/", "notes": ""}, {"type": "Medical", "org": "Intermountain Health Platte Valley Hosp(SAFE/SANE)", "counties": ["Adams"], "countyDisplay": "Adams", "services": ["Healthcare/Urgent Care", "Medical/SANE", "Serves Men", "Serves Women", "Sexual Assault Services"], "pet": "unknown", "phone": "(303) 498-1600", "city": "1600 Prairie Center Pkwy, Brighton", "shelter": "", "lgbtq": "", "website": "https://intermountainhealthcare.org/locations/intermountain-health-platte-valley-hospital/medical-services", "websiteDisplay": "https://intermountainhealthcare.org/locations/intermountain-health-platte-valley-hospital/medical-services", "notes": ""}, {"type": "Medical", "org": "Carbon Health Urgent Care accepts Medicaid", "counties": ["Jefferson"], "countyDisplay": "Jefferson", "services": ["Healthcare/Urgent Care", "Serves Men", "Serves Women"], "pet": "unknown", "phone": "720 642 8217", "city": "9116 W Bowles Ave, #3A, Littleton", "shelter": "", "lgbtq": "", "website": "https://carbonhealth.com/locations/littleton-colorado", "websiteDisplay": "https://carbonhealth.com/locations/littleton-colorado", "notes": ""}, {"type": "Medical", "org": "Bailey Dental accepts Medicaid", "counties": ["Park"], "countyDisplay": "Park", "services": ["Dental Care", "Healthcare/Urgent Care", "Serves Men", "Serves Women"], "pet": "unknown", "phone": "(303) 838-2224", "city": "17 Co Rd 68, Bailey", "shelter": "", "lgbtq": "", "website": "https://baileydentists.com/", "websiteDisplay": "https://baileydentists.com/", "notes": ""}, {"type": "Medical", "org": "Dr Trinka Optometrist accepts Medicaid", "counties": ["Jefferson"], "countyDisplay": "Jefferson", "services": ["Healthcare/Urgent Care", "Serves Men", "Serves Women", "Vision Care"], "pet": "unknown", "phone": "(303) 838-9355", "city": "26689 Pleasant Park Rd # 150, Conifer", "shelter": "", "lgbtq": "", "website": "https://eyebrainconnection.com/", "websiteDisplay": "https://eyebrainconnection.com/", "notes": ""}, {"type": "Forensic Interviews", "org": "SARA House", "counties": ["Logan", "Morgan", "Washington", "Yuma"], "countyDisplay": "Logan, Morgan, Washington, Yuma", "services": ["Advocacy", "Case Management", "Child/Youth Services", "Counseling/Therapy", "Forensic Interviewing", "Medical/SANE", "Serves Children/Youth", "Serves Families"], "pet": "unknown", "phone": "970-867-2121", "city": "", "shelter": "", "lgbtq": "", "website": "https://www.sarahouseco.org/auto-draft-2/", "websiteDisplay": "https://www.sarahouseco.org/auto-draft-2/", "notes": ""}, {"type": "Medical", "org": "Valley Wide Health Systems", "counties": ["Alamosa"], "countyDisplay": "Alamosa", "services": ["Healthcare/Urgent Care", "Medical/SANE", "Serves Men", "Serves Women", "Sexual Assault Services"], "pet": "unknown", "phone": "719-588-8609", "city": "", "shelter": "", "lgbtq": "", "website": "https://cdpsdocs.state.co.us/ovp/SARP/SANELocations2016.pdf", "websiteDisplay": "https://cdpsdocs.state.co.us/ovp/SARP/SANELocations2016.pdf", "notes": ""}, {"type": "Medical", "org": "Boulder Community Health – Foothills", "counties": ["Boulder"], "countyDisplay": "Boulder", "services": ["Healthcare/Urgent Care", "Medical/SANE", "Serves Men", "Serves Women", "Sexual Assault Services"], "pet": "unknown", "phone": "303-415-7600", "city": "", "shelter": "", "lgbtq": "", "website": "https://cdpsdocs.state.co.us/ovp/SARP/SANELocations2016.pdf", "websiteDisplay": "https://cdpsdocs.state.co.us/ovp/SARP/SANELocations2016.pdf", "notes": ""}, {"type": "Medical", "org": "St. Thomas More Hospital", "counties": ["Fremont"], "countyDisplay": "Fremont", "services": ["Healthcare/Urgent Care", "Medical/SANE", "Serves Men", "Serves Women", "Sexual Assault Services"], "pet": "unknown", "phone": "719-285-2270", "city": "", "shelter": "", "lgbtq": "", "website": "https://cdpsdocs.state.co.us/ovp/SARP/SANELocations2016.pdf", "websiteDisplay": "https://cdpsdocs.state.co.us/ovp/SARP/SANELocations2016.pdf", "notes": ""}, {"type": "Medical", "org": "Memorial Hospital Central", "counties": ["El Paso"], "countyDisplay": "El Paso", "services": ["Healthcare/Urgent Care", "Medical/SANE", "Serves Men", "Serves Women", "Sexual Assault Services"], "pet": "unknown", "phone": "719-365-8333", "city": "", "shelter": "", "lgbtq": "", "website": "https://cdpsdocs.state.co.us/ovp/SARP/SANELocations2016.pdf", "websiteDisplay": "https://cdpsdocs.state.co.us/ovp/SARP/SANELocations2016.pdf", "notes": ""}, {"type": "Medical", "org": "The Memorial Hospital at Craig", "counties": ["Moffat"], "countyDisplay": "Moffat", "services": ["Healthcare/Urgent Care", "Medical/SANE", "Serves Men", "Serves Women", "Sexual Assault Services"], "pet": "unknown", "phone": "970-824-9411", "city": "", "shelter": "", "lgbtq": "", "website": "https://cdpsdocs.state.co.us/ovp/SARP/SANELocations2016.pdf", "websiteDisplay": "https://cdpsdocs.state.co.us/ovp/SARP/SANELocations2016.pdf", "notes": ""}, {"type": "Medical", "org": "Delta County Memorial Hospital", "counties": ["Delta"], "countyDisplay": "Delta", "services": ["Healthcare/Urgent Care", "Medical/SANE", "Serves Men", "Serves Women", "Sexual Assault Services"], "pet": "unknown", "phone": "970-874-2221", "city": "", "shelter": "", "lgbtq": "", "website": "https://cdpsdocs.state.co.us/ovp/SARP/SANELocations2016.pdf", "websiteDisplay": "https://cdpsdocs.state.co.us/ovp/SARP/SANELocations2016.pdf", "notes": ""}, {"type": "Medical", "org": "Denver Health Medical Center", "counties": ["Denver"], "countyDisplay": "Denver", "services": ["Healthcare/Urgent Care", "Medical/SANE", "Serves Men", "Serves Women", "Sexual Assault Services"], "pet": "unknown", "phone": "303-602-8100", "city": "", "shelter": "", "lgbtq": "", "website": "https://cdpsdocs.state.co.us/ovp/SARP/SANELocations2016.pdf", "websiteDisplay": "https://cdpsdocs.state.co.us/ovp/SARP/SANELocations2016.pdf", "notes": ""}, {"type": "Medical", "org": "Littleton Adventist", "counties": ["Arapahoe"], "countyDisplay": "Arapahoe", "services": ["Healthcare/Urgent Care", "Medical/SANE", "Serves Men", "Serves Women", "Sexual Assault Services"], "pet": "unknown", "phone": "303-778-2407", "city": "", "shelter": "", "lgbtq": "", "website": "https://cdpsdocs.state.co.us/ovp/SARP/SANELocations2016.pdf", "websiteDisplay": "https://cdpsdocs.state.co.us/ovp/SARP/SANELocations2016.pdf", "notes": ""}, {"type": "Medical", "org": "Medical Center of Aurora", "counties": ["Arapahoe"], "countyDisplay": "Arapahoe", "services": ["Healthcare/Urgent Care", "Medical/SANE", "Serves Men", "Serves Women", "Sexual Assault Services"], "pet": "unknown", "phone": "303-671-4945", "city": "", "shelter": "", "lgbtq": "", "website": "https://cdpsdocs.state.co.us/ovp/SARP/SANELocations2016.pdf", "websiteDisplay": "https://cdpsdocs.state.co.us/ovp/SARP/SANELocations2016.pdf", "notes": ""}, {"type": "Medical", "org": "Porter Adventist Hospital", "counties": ["Denver"], "countyDisplay": "Denver", "services": ["Healthcare/Urgent Care", "Medical/SANE", "Serves Men", "Serves Women", "Sexual Assault Services"], "pet": "unknown", "phone": "303-778-2407", "city": "", "shelter": "", "lgbtq": "", "website": "https://cdpsdocs.state.co.us/ovp/SARP/SANELocations2016.pdf", "websiteDisplay": "https://cdpsdocs.state.co.us/ovp/SARP/SANELocations2016.pdf", "notes": ""}, {"type": "Medical", "org": "St. Anthony Hospital (Lakewood)", "counties": ["Jefferson"], "countyDisplay": "Jefferson", "services": ["Healthcare/Urgent Care", "Medical/SANE", "Serves Men", "Serves Women", "Sexual Assault Services"], "pet": "unknown", "phone": "720-321-4103", "city": "", "shelter": "", "lgbtq": "", "website": "https://cdpsdocs.state.co.us/ovp/SARP/SANELocations2016.pdf", "websiteDisplay": "https://cdpsdocs.state.co.us/ovp/SARP/SANELocations2016.pdf", "notes": ""}, {"type": "Medical", "org": "Mercy Regional Medical Center", "counties": ["La Plata"], "countyDisplay": "La Plata", "services": ["Healthcare/Urgent Care", "Medical/SANE", "Serves Men", "Serves Women", "Sexual Assault Services"], "pet": "unknown", "phone": "970-764-2100", "city": "", "shelter": "", "lgbtq": "", "website": "https://cdpsdocs.state.co.us/ovp/SARP/SANELocations2016.pdf", "websiteDisplay": "https://cdpsdocs.state.co.us/ovp/SARP/SANELocations2016.pdf", "notes": ""}, {"type": "Medical", "org": "S.A.R.A. House", "counties": ["Morgan"], "countyDisplay": "Morgan", "services": ["Healthcare/Urgent Care", "Medical/SANE", "Serves Men", "Serves Women", "Sexual Assault Services"], "pet": "unknown", "phone": "970-867-2121", "city": "", "shelter": "", "lgbtq": "", "website": "https://cdpsdocs.state.co.us/ovp/SARP/SANELocations2016.pdf", "websiteDisplay": "https://cdpsdocs.state.co.us/ovp/SARP/SANELocations2016.pdf", "notes": ""}, {"type": "Medical", "org": "St. Anthony Summit Medical Center", "counties": ["Summit"], "countyDisplay": "Summit", "services": ["Healthcare/Urgent Care", "Medical/SANE", "Serves Men", "Serves Women", "Sexual Assault Services"], "pet": "unknown", "phone": "970-668-3300", "city": "", "shelter": "", "lgbtq": "", "website": "https://cdpsdocs.state.co.us/ovp/SARP/SANELocations2016.pdf", "websiteDisplay": "https://cdpsdocs.state.co.us/ovp/SARP/SANELocations2016.pdf", "notes": ""}, {"type": "Medical", "org": "St. Mary's Medical Center", "counties": ["Mesa"], "countyDisplay": "Mesa", "services": ["Healthcare/Urgent Care", "Medical/SANE", "Serves Men", "Serves Women", "Sexual Assault Services"], "pet": "unknown", "phone": "970-298-2273", "city": "", "shelter": "", "lgbtq": "", "website": "https://cdpsdocs.state.co.us/ovp/SARP/SANELocations2016.pdf", "websiteDisplay": "https://cdpsdocs.state.co.us/ovp/SARP/SANELocations2016.pdf", "notes": ""}, {"type": "Medical", "org": "North Colorado Medical Center", "counties": ["Weld"], "countyDisplay": "Weld", "services": ["Healthcare/Urgent Care", "Medical/SANE", "Serves Men", "Serves Women", "Sexual Assault Services"], "pet": "unknown", "phone": "970-350-6244", "city": "", "shelter": "", "lgbtq": "", "website": "https://cdpsdocs.state.co.us/ovp/SARP/SANELocations2016.pdf", "websiteDisplay": "https://cdpsdocs.state.co.us/ovp/SARP/SANELocations2016.pdf", "notes": ""}, {"type": "Medical", "org": "Lincoln Community Hospital", "counties": ["Lincoln"], "countyDisplay": "Lincoln", "services": ["Healthcare/Urgent Care", "Medical/SANE", "Serves Men", "Serves Women", "Sexual Assault Services"], "pet": "unknown", "phone": "719-743-2121", "city": "", "shelter": "", "lgbtq": "", "website": "https://cdpsdocs.state.co.us/ovp/SARP/SANELocations2016.pdf", "websiteDisplay": "https://cdpsdocs.state.co.us/ovp/SARP/SANELocations2016.pdf", "notes": ""}, {"type": "Medical", "org": "Medical Center of the Rockies", "counties": ["Larimer"], "countyDisplay": "Larimer", "services": ["Healthcare/Urgent Care", "Medical/SANE", "Serves Men", "Serves Women", "Sexual Assault Services"], "pet": "unknown", "phone": "970-624-1600", "city": "", "shelter": "", "lgbtq": "", "website": "https://cdpsdocs.state.co.us/ovp/SARP/SANELocations2016.pdf", "websiteDisplay": "https://cdpsdocs.state.co.us/ovp/SARP/SANELocations2016.pdf", "notes": ""}, {"type": "Medical", "org": "Montrose Memorial Hospital", "counties": ["Montrose"], "countyDisplay": "Montrose", "services": ["Healthcare/Urgent Care", "Medical/SANE", "Serves Men", "Serves Women", "Sexual Assault Services"], "pet": "unknown", "phone": "970-249-2211", "city": "", "shelter": "", "lgbtq": "", "website": "https://cdpsdocs.state.co.us/ovp/SARP/SANELocations2016.pdf", "websiteDisplay": "https://cdpsdocs.state.co.us/ovp/SARP/SANELocations2016.pdf", "notes": ""}, {"type": "Medical", "org": "Parkview Medical Center", "counties": ["Pueblo"], "countyDisplay": "Pueblo", "services": ["Healthcare/Urgent Care", "Medical/SANE", "Serves Men", "Serves Women", "Sexual Assault Services"], "pet": "unknown", "phone": "719-584-4000", "city": "", "shelter": "", "lgbtq": "", "website": "https://cdpsdocs.state.co.us/ovp/SARP/SANELocations2016.pdf", "websiteDisplay": "https://cdpsdocs.state.co.us/ovp/SARP/SANELocations2016.pdf", "notes": ""}, {"type": "Medical", "org": "Yampa Valley Medical Center", "counties": ["Routt"], "countyDisplay": "Routt", "services": ["Healthcare/Urgent Care", "Medical/SANE", "Serves Men", "Serves Women", "Sexual Assault Services"], "pet": "unknown", "phone": "970-879-1322", "city": "", "shelter": "", "lgbtq": "", "website": "https://cdpsdocs.state.co.us/ovp/SARP/SANELocations2016.pdf", "websiteDisplay": "https://cdpsdocs.state.co.us/ovp/SARP/SANELocations2016.pdf", "notes": ""}, {"type": "Medical", "org": "Mt. San Rafael Hospital", "counties": ["Las Animas"], "countyDisplay": "Las Animas", "services": ["Healthcare/Urgent Care", "Medical/SANE", "Serves Men", "Serves Women", "Sexual Assault Services"], "pet": "unknown", "phone": "719-846-4262", "city": "", "shelter": "", "lgbtq": "", "website": "https://cdpsdocs.state.co.us/ovp/SARP/SANELocations2016.pdf", "websiteDisplay": "https://cdpsdocs.state.co.us/ovp/SARP/SANELocations2016.pdf", "notes": ""}];
+const FACETS = {"types": ["Addiction", "Auto", "DV Shelter", "Forensic Interviews", "Human Trafficking", "ID Assistance", "Language", "Legal", "Medical", "Non-DV Shelter", "Other", "Psych", "Resources", "Scholarships/Grants"], "counties": ["Adams", "Alamosa", "All Colorado counties", "Arapahoe", "Bent", "Boulder", "Broomfield", "Chaffee", "Clear Creek", "Crowley", "Custer", "Delta", "Denver", "Denver metro", "Douglas", "Eagle", "El Paso", "Elbert", "Fremont", "Garfield", "Gilpin", "Jefferson", "La Plata", "Lake", "Larimer", "Las Animas", "Lincoln", "Logan", "Mesa", "Moffat", "Montrose", "Morgan", "Nationwide", "Nationwide / out-of-state program", "Otero", "Park", "Phillips", "Pitkin", "Pueblo", "Routt", "San Miguel", "Sedewick", "Summit", "Teller", "Washington", "Weld", "Yuma"], "services": ["Advocacy", "Basic Needs", "Case Management", "Child/Youth Services", "Civil Attorney Referral", "Counseling/Therapy", "Court Advocacy", "Crisis Hotline", "Dental Care", "Disability Services", "Domestic Violence Services", "Education/Prevention", "Emergency Shelter", "Financial Assistance", "Forensic Interviewing", "Healthcare/Urgent Care", "Housing Assistance", "Human Trafficking Services", "ID Assistance", "Immigration Services", "Interpretation/Translation", "Legal Services", "LGBTQ+ Services", "Medical/SANE", "Mental Health Crisis", "Pet Assistance Offsite", "Pets", "Protection Orders", "Replevin/Property Recovery", "Safety Planning", "Scholarship/Grant", "Serves Children/Youth", "Serves Families", "Serves Men", "Serves Women", "Sexual Assault Services", "Shelter", "Spanish/Language Access", "Substance Use Treatment", "Support Groups", "Transitional Housing", "Transportation/Auto", "Victim Compensation", "Vision Care"]};
+const QUESTIONS = ["Can I get a good number to call you back on?", "What county are you in?", "Are you currently in a safe location?", "When is the last time you used drugs or alcohol?"];
+const SHELTER_REQS = ["Do you have a car?", "Are you a victim of IPDV in CO?", "Are you ok with no nearby medical facilities?", "Are you ok living in a rural community?", "Are there kids in school?", "Are you ok with living in a sober house?", "Are you ok living in a low security house?", "Are you not a current trafficking victim?", "Is your job compatible with living in rural community?"];
+
+
+// ---------- Password gate (casual deterrent only) ----------
+const GATE_PASSWORD = "sweetmaple";
+
+function unlock() {
+  document.body.classList.remove("locked");
+  const gate = document.getElementById("password-gate");
+  if (gate) gate.remove();
+}
+
+(function initGate() {
+  if (sessionStorage.getItem("resources-unlocked") === "1") {
+    unlock();
+    return;
+  }
+  const form = document.getElementById("gate-form");
+  const input = document.getElementById("gate-input");
+  const error = document.getElementById("gate-error");
+  form.addEventListener("submit", (e) => {
+    e.preventDefault();
+    if (input.value === GATE_PASSWORD) {
+      sessionStorage.setItem("resources-unlocked", "1");
+      unlock();
+    } else {
+      error.textContent = "Incorrect password.";
+      input.select();
+    }
+  });
+  setTimeout(() => input.focus(), 0);
+})();
+
+// ---------- Tiny DOM + escaping helpers ----------
+const $ = (sel) => document.querySelector(sel);
+const $$ = (sel) => document.querySelectorAll(sel);
+const ESC_MAP = { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" };
+const escapeHtml = (s) => (s || "").replace(/[&<>"']/g, (c) => ESC_MAP[c]);
+
+// ---------- Filter state ----------
+const state = {
+  q: "",
+  type: "",
+  county: "",
+  services: new Set(),
+};
+
+// Free-text "service area" strings that mean a row should match any county.
+const BROAD_COUNTY_RX = /all colorado|nationwide|statewide|denver metro|out of state/;
+
+// ---------- Predicates used by matches() ----------
+function matchesCounty(rec) {
+  if (!state.county) return true;
+  if (rec.counties.includes(state.county)) return true;
+  return BROAD_COUNTY_RX.test((rec.countyDisplay || "").toLowerCase());
+}
+
+function matchesServices(rec) {
+  for (const s of state.services) {
+    if (!rec.services.includes(s)) return false;
+  }
+  return true;
+}
+
+function matchesSearch(rec) {
+  if (!state.q) return true;
+  const hay = [
+    rec.org, rec.city, rec.countyDisplay, rec.notes,
+    rec.phone, rec.websiteDisplay, rec.type, rec.services.join(" "),
+  ].join(" ").toLowerCase();
+  return hay.includes(state.q);
+}
+
+function matches(rec) {
+  return (!state.type || rec.type === state.type)
+      && matchesCounty(rec)
+      && matchesServices(rec)
+      && matchesSearch(rec);
+}
+
+// ---------- Card rendering helpers ----------
+function phoneLink(phone) {
+  const digits = phone.replace(/[^0-9+]/g, "");
+  return `<a href="tel:${escapeHtml(digits)}">${escapeHtml(phone)}</a>`;
+}
+
+function websiteLink(url, display) {
+  return `<a href="${escapeHtml(url)}" target="_blank" rel="noopener">${escapeHtml(display || url)}</a>`;
+}
+
+function metaItem(label, valueHtml) {
+  return `<span><b>${label}:</b> ${valueHtml}</span>`;
+}
+
+function renderCard(rec) {
+  const pills = [
+    `<span class="pill type">${escapeHtml(rec.type)}</span>`,
+    rec.pet === "yes"    && `<span class="pill pet">Pet friendly</span>`,
+    rec.pet === "foster" && `<span class="pill foster">Pet foster</span>`,
+    (rec.lgbtq || "").toLowerCase() === "y" && `<span class="pill lgbtq">LGBTQ+ inclusive</span>`,
+  ].filter(Boolean).join("");
+
+  const meta = [
+    rec.countyDisplay && metaItem("County", escapeHtml(rec.countyDisplay)),
+    rec.city          && metaItem("City",   escapeHtml(rec.city)),
+    rec.phone         && metaItem("Phone",  phoneLink(rec.phone)),
+    rec.website       && metaItem("Web",    websiteLink(rec.website, rec.websiteDisplay)),
+    (rec.shelter || "").toLowerCase() === "y" && metaItem("Shelter", "Yes"),
+  ].filter(Boolean).join("");
+
+  const services = rec.services.map((s) => {
+    const cls = state.services.has(s) ? "svc match" : "svc";
+    return `<span class="${cls}">${escapeHtml(s)}</span>`;
+  }).join("");
+
+  const svcBlock = services
+    ? `<details><summary>Services (${rec.services.length})</summary><div class="svc-list">${services}</div></details>`
+    : "";
+  const notesBlock = rec.notes ? `<div class="notes">${escapeHtml(rec.notes)}</div>` : "";
+
+  return `
+    <article class="card">
+      <h3><span>${escapeHtml(rec.org)}</span>${pills}</h3>
+      <div class="meta">${meta}</div>
+      ${svcBlock}
+      ${notesBlock}
+    </article>
+  `;
+}
+
+// ---------- Results + summary rendering ----------
+function activeFilterBits() {
+  return [
+    state.type   && `type: ${state.type}`,
+    state.county && `county: ${state.county}`,
+    state.services.size && `${state.services.size} service${state.services.size > 1 ? "s" : ""}`,
+    state.q      && `"${state.q}"`,
+  ].filter(Boolean);
+}
+
+function render() {
+  const filtered = DATA.filter(matches).sort((a, b) => a.org.localeCompare(b.org));
+  $("#count").textContent = filtered.length.toLocaleString();
+  $("#results").innerHTML = filtered.length
+    ? filtered.map(renderCard).join("")
+    : `<div class="empty">No resources match the current filters. Try clearing some filters or broadening your search.</div>`;
+
+  const bits = activeFilterBits();
+  $("#active-filters").textContent = bits.length ? "Filters: " + bits.join(" · ") : "";
+}
+
+// ---------- Service chips (multi-select) ----------
+function renderServiceChips() {
+  const host = $("#service-chips");
+  host.innerHTML = "";
+  FACETS.services.forEach((svc) => {
+    const btn = document.createElement("button");
+    btn.type = "button";
+    btn.className = "chip";
+    btn.textContent = svc;
+    btn.classList.toggle("active", state.services.has(svc));
+    btn.addEventListener("click", () => toggleService(svc, btn));
+    host.appendChild(btn);
+  });
+  updateServiceCount();
+}
+
+function toggleService(svc, btn) {
+  if (state.services.has(svc)) state.services.delete(svc);
+  else state.services.add(svc);
+  btn.classList.toggle("active");
+  updateServiceCount();
+  render();
+}
+
+function updateServiceCount() {
+  $("#svc-count").textContent = state.services.size
+    ? `(${state.services.size} selected)` : "";
+}
+
+// ---------- Right-column question lists ----------
+function renderQuestionList(listEl, items, emptyMsg) {
+  listEl.innerHTML = "";
+  if (!items.length) {
+    listEl.innerHTML = `<li style="color:var(--muted); font-style:italic;">${emptyMsg}</li>`;
+    return;
+  }
+  items.forEach((q, i) => {
+    const id = `${listEl.id}-item-${i}`;
+    const li = document.createElement("li");
+    li.innerHTML = `
+      <label for="${id}">${escapeHtml(q)}</label>
+      <input type="text" id="${id}" autocomplete="off" placeholder="Type response…" />
+    `;
+    const input = li.querySelector("input");
+    input.addEventListener("input", () => {
+      li.classList.toggle("answered", input.value.trim().length > 0);
+    });
+    listEl.appendChild(li);
+  });
+}
+
+function resetQuestionList(listId) {
+  const list = document.getElementById(listId);
+  if (!list) return;
+  list.querySelectorAll("input[type='text']").forEach((input) => {
+    input.value = "";
+    input.closest("li").classList.remove("answered");
+  });
+}
+
+// ---------- Wire-up ----------
+function bindFilter(sel, evt, key, getValue) {
+  $(sel).addEventListener(evt, (e) => { state[key] = getValue(e); render(); });
+}
+
+function clearAllFilters() {
+  state.q = "";
+  state.type = "";
+  state.county = "";
+  state.services.clear();
+  $("#q").value = "";
+  $("#type-filter").value = "";
+  $("#county-filter").value = "";
+  renderServiceChips();
+  render();
+}
+
+bindFilter("#q",            "input",  "q",      (e) => e.target.value.trim().toLowerCase());
+bindFilter("#type-filter",  "change", "type",   (e) => e.target.value);
+bindFilter("#county-filter","change", "county", (e) => e.target.value);
+$("#clear-btn").addEventListener("click", clearAllFilters);
+
+$$("[data-reset]").forEach((btn) => {
+  btn.addEventListener("click", () => resetQuestionList(btn.getAttribute("data-reset")));
+});
+
+renderServiceChips();
+render();
+renderQuestionList(
+  $("#question-list"), QUESTIONS,
+  "No questions configured. Add comma-separated questions to <code>questions.csv</code> and rebuild."
+);
+renderQuestionList(
+  $("#shelter-list"), SHELTER_REQS,
+  "No shelter requirements configured. Add comma-separated questions to <code>shelter_reqs.csv</code> and rebuild."
+);
+</script>
+</body>
+</html>
